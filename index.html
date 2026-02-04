@@ -78,9 +78,9 @@
     </div>
   </header>
 
-  <!-- Wrap for landing image (immagine centrata) -->
+  <!-- Wrap for landing image -->
   <div class="wrap">
-    <!-- Immagine fissa rimossa -->
+    <!-- Immagine statica rimosso -->
   </div>
 
   <!-- Floating image (trascinabile) -->
@@ -93,7 +93,10 @@
     let isDragging = false;
     let startX, startY, currentX, currentY;
 
-    // Function to handle image movement
+    // Funzione per posizionare l'immagine trascinabile inizialmente centrata
+    image.style.transform = 'translate(-50%, -50%)';
+
+    // Funzione per il movimento dell'immagine
     const onMove = (clientX, clientY) => {
       if (!isDragging) return;
       const dx = clientX - startX;
@@ -101,11 +104,11 @@
       currentX = startX + dx;
       currentY = startY + dy;
 
-      // Update position
+      // Aggiorna la posizione dell'immagine
       image.style.transform = `translate(${currentX}px, ${currentY}px)`;
     };
 
-    // Start drag
+    // Inizia il drag
     image.addEventListener('mousedown', (e) => {
       isDragging = true;
       startX = e.clientX;
@@ -116,17 +119,17 @@
       document.addEventListener('mouseup', onMouseUp);
     });
 
-    // Mouse movement
+    // Movimento con il mouse
     const onMouseMove = (e) => onMove(e.clientX, e.clientY);
 
-    // Stop drag
+    // Ferma il drag
     const onMouseUp = () => {
       isDragging = false;
       document.removeEventListener('mousemove', onMouseMove);
       document.removeEventListener('mouseup', onMouseUp);
     };
 
-    // Allow dragging on touch devices
+    // Abilita il drag sui dispositivi touch
     image.addEventListener('touchstart', (e) => {
       const touch = e.touches[0];
       isDragging = true;
