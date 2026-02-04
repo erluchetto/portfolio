@@ -25,10 +25,38 @@
       height: auto;
       cursor: pointer;
     }
+
+    /* Header Year */
+    .header-year {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      padding: 16px 0;
+      text-align: center;
+      z-index: 10;
+      background: rgba(255, 255, 255, 0.8); /* leggera trasparenza */
+    }
+
+    .header-year h2 {
+      margin: 0;
+      font-family: 'Helvetica', sans-serif;
+      font-weight: bold;
+      font-size: 36px;
+      color: #111; /* Colore scuro per il contrasto */
+    }
   </style>
 </head>
 
 <body>
+  <!-- Header with 2026 -->
+  <header class="header-year">
+    <div class="container">
+      <h2>2026</h2>
+    </div>
+  </header>
+
+  <!-- Wrap for landing image -->
   <div class="wrap">
     <a href="home.html">
       <img src="assets/landing.png" alt="L.N.D. Portfolio">
