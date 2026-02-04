@@ -17,6 +17,7 @@
       display: flex;
       align-items: center;
       justify-content: center;
+      position: relative;
     }
 
     img {
@@ -32,7 +33,7 @@
       top: 0;
       left: 0;
       width: 100%;
-      padding: 10px 0; /* Ridotto per minore spazio */
+      padding: 10px 0;
       text-align: center;
       z-index: 10;
       background: rgba(255, 255, 255, 0.8); /* leggera trasparenza */
@@ -42,8 +43,29 @@
       margin: 0;
       font-family: 'Helvetica', sans-serif;
       font-weight: bold;
-      font-size: 28px; /* Diminuito per rendere il testo più piccolo */
-      color: #111; /* Colore scuro per il contrasto */
+      font-size: 28px;
+      color: #111;
+    }
+
+    /* Draggable Image */
+    .floating-image {
+      position: absolute;
+      cursor: grab;
+      z-index: 10;
+      touch-action: none;
+      will-change: transform;
+      transition: transform 0.1s ease-out;
+    }
+
+    .floating-image:active {
+      cursor: grabbing;
+    }
+
+    /* Draggable Image Animation */
+    .floating-image img {
+      width: 420px;
+      max-width: 70vw;
+      height: auto;
     }
   </style>
 </head>
@@ -62,5 +84,74 @@
       <img src="assets/landing.png" alt="L.N.D. Portfolio">
     </a>
   </div>
+
+  <!-- Floating image -->
+  <div class="floating-image" id="draggableImage">
+    <img src="assets/landing.png" alt="Draggable Image">
+  </div>
+
+  <script>
+    const image = document.getElementById('draggableImage');
+    let isDragging = false;
+    let startX, startY, currentX, currentY;
+
+    // Function to handle image movement
+    const onMove = (clientX, clientY) => {
+      if (!isDragging) return;
+      const dx = clientX - startX;
+      const dy = clientY - startY;
+      currentX = startX + dx;
+      currentY = startY + dy;
+
+      // Update position
+      image.style.transform = `translate(${currentX}px, ${currentY}px)`;
+    };
+
+    // Start drag
+    image.addEventListener('mousedown', (e) => {
+      isDragging = true;
+      startX = e.clientX;
+      startY = e.clientY;
+      currentX = 0;
+      currentY = 0;
+      document.addEventListener('mousemove', onMouseMove);
+      document.addEventListener('mouseup', onMouseUp);
+    });
+
+    // Mouse movement
+    const onMouseMove = (e) => onMove(e.clientX, e.clientY);
+
+    // Stop drag
+    const onMouseUp = () => {
+      isDragging = false;
+      document.removeEventListener('mousemove', onMouseMove);
+      document.removeEventListener('mouseup', onMouseUp);
+    };
+
+    // Allow dragging on touch devices
+    image.addEventListener('touchstart', (e) => {
+      const touch = e.touches[0];
+      isDragging = true;
+      startX = touch.clientX;
+      startY = touch.clientY;
+      currentX = 0;
+      currentY = 0;
+      document.addEventListener('touchmove', onTouchMove, { passive: false });
+      document.addEventListener('touchend', onTouchEnd);
+    });
+
+    const onTouchMove = (e) => {
+      e.preventDefault();
+      const touch = e.touches[0];
+      onMove(touch.clientX, touch.clientY);
+    };
+
+    const onTouchEnd = () => {
+      isDragging = false;
+      document.removeEventListener('touchmove', onTouchMove);
+      document.removeEventListener('touchend', onTouchEnd);
+    };
+  </script>
+
 </body>
 </html>
