@@ -105,7 +105,7 @@
       transform: scaleX(1);
     }
 
-    /* Orbit circle (like a molecular outline) */
+    /* Orbit circle (projects) */
     .orbit{
       --orbit-size: clamp(200px, 38vw, 360px);
 
@@ -124,67 +124,84 @@
       will-change: transform, opacity;
     }
 
-    /* Slow orbit rotation (moves the planet along the circle) */
+    /* Slow orbit rotation (moves the planet along the projects circle line) */
     .project-wrap.open .orbit{
       opacity: 1;
       pointer-events: auto;
-      animation: orbit-spin 26s linear infinite; /* FIX 4: much slower */
+      animation: orbit-spin 26s linear infinite; /* slow */
     }
 
     /* Keep the "sun" above the orbit */
     .project-toggle{ z-index: 2; }
 
-    /* Planet wrapper sits on the orbit radius */
+    /*
+      PLANET: place the WHOLE planet ON the orbit outline.
+      We rotate the orbit container, so anything placed at radius sits on the line.
+    */
     .planet-wrap{
       position: absolute;
       left: 50%;
       top: 50%;
-      transform: translate(-50%, -50%) translateX(calc((var(--orbit-size) / 2) - 16px));
-      transform-origin: 0 0;
+      transform: translate(-50%, -50%);
+      width: 0;
+      height: 0;
       will-change: transform;
     }
 
-    /* Counter-rotation keeps planet text always horizontal/readable */
-    .project-wrap.open .planet-wrap{
-      animation: planet-counterspin 26s linear infinite; /* same duration as orbit */
+    /* Push the planet out exactly to the orbit outline */
+    .planet-wrap .planet{
+      transform: translateX(calc((var(--orbit-size) / 2)));
     }
 
-    /* Planet itself: outlined circle + white fill + label */
+    /* Counter-rotation keeps the label always horizontal/readable */
+    .project-wrap.open .planet-wrap{
+      animation: planet-counterspin 26s linear infinite; /* matches orbit */
+    }
+
+    /*
+      FIX 1: Bigger Quercia circle + text centered inside it
+      FIX 2: Entire planet body sits on the orbit outline (the circle itself touches the outline)
+    */
     .planet{
       display: inline-flex;
       align-items: center;
-      gap: 10px;
+      justify-content: center;
+      gap: 0;
       white-space: nowrap;
       user-select: none;
-    }
 
-    .planet-core{
-      width: 22px;
-      height: 22px;
+      width: clamp(120px, 18vw, 190px);   /* bigger planet circle */
+      height: clamp(120px, 18vw, 190px);
       border-radius: 999px;
-      background: #fff;                 /* FIX 2: white filled */
-      border: 2px solid rgba(17,17,17,.45); /* black outline like orbit */
-      flex: 0 0 auto;
+      background: #fff;
+      border: 2px solid rgba(17,17,17,.45);
+
+      position: relative;
+      box-sizing: border-box;
     }
 
     .planet-label{
-      font-size: clamp(12px, 1.5vw, 16px);
-      letter-spacing: 0.02em;
-      color: rgba(17,17,17,.9);
+      font-size: clamp(12px, 1.6vw, 18px);
+      letter-spacing: 0.06em;
+      color: rgba(17,17,17,.92);
       line-height: 1;
+      font-weight: 700;
+      text-transform: uppercase;
     }
 
-    /* Satellite: "Basecamp project" orbiting around Quercia */
+    /* Satellite: orbits around Quercia (inside the planet boundary, like a moon) */
     .satellite{
-      position: relative;
-      display: inline-block;
-      margin-left: 10px;
-      padding-left: 10px;
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      transform-origin: center;
+      transform: translate(-50%, -50%) rotate(0deg) translateX(calc((clamp(120px, 18vw, 190px) / 2) + 18px));
       color: rgba(17,17,17,.65);
-      font-size: clamp(11px, 1.35vw, 14px);
+      font-size: clamp(11px, 1.25vw, 14px);
       letter-spacing: 0.02em;
+      white-space: nowrap;
       line-height: 1;
-      transform-origin: -10px 50%;
+      padding-left: 10px;
     }
 
     .satellite::before{
@@ -200,9 +217,8 @@
     }
 
     .project-wrap.open .satellite{
-      animation: satellite-spin 6.5s linear infinite; /* slower satellite too */
+      animation: satellite-spin 8.5s linear infinite; /* slower */
     }
-
     .project-wrap:not(.open) .satellite{
       animation: none;
     }
@@ -212,15 +228,15 @@
       to{ transform: translate(-50%, -50%) rotate(360deg); }
     }
 
-    /* Counter rotation cancels orbit rotation so the label stays horizontal */
+    /* Counter rotation cancels orbit rotation so the planet text stays horizontal */
     @keyframes planet-counterspin{
-      from{ transform: translate(-50%, -50%) translateX(calc((var(--orbit-size) / 2) - 16px)) rotate(0deg); }
-      to{ transform: translate(-50%, -50%) translateX(calc((var(--orbit-size) / 2) - 16px)) rotate(-360deg); }
+      from{ transform: translate(-50%, -50%) rotate(0deg); }
+      to{ transform: translate(-50%, -50%) rotate(-360deg); }
     }
 
     @keyframes satellite-spin{
-      from{ transform: rotate(0deg); }
-      to{ transform: rotate(360deg); }
+      from{ transform: translate(-50%, -50%) rotate(0deg) translateX(calc((clamp(120px, 18vw, 190px) / 2) + 18px)); }
+      to{ transform: translate(-50%, -50%) rotate(360deg) translateX(calc((clamp(120px, 18vw, 190px) / 2) + 18px)); }
     }
 
     /* ===== CONTACTS dropdown ===== */
@@ -306,10 +322,9 @@
         </button>
 
         <div class="orbit" id="projectOrbit" aria-hidden="true">
-          <!-- FIX 1+2+3: Planet rides the orbit, has its own outlined circle, stays horizontal -->
+          <!-- Planet anchored at center; pushed to radius so its body sits on the orbit line -->
           <div class="planet-wrap" aria-label="Quercia planet (orbiting)">
             <div class="planet">
-              <span class="planet-core" aria-hidden="true"></span>
               <span class="planet-label">QUERCIA</span>
               <span class="satellite">Basecamp project</span>
             </div>
