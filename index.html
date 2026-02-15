@@ -55,6 +55,7 @@
       left: 50%;
       width: var(--image-width);
       transform: translate(-50%, -50%);
+      transition: transform 320ms ease;
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -63,6 +64,10 @@
       pointer-events: auto;
       user-select: none;
       z-index: 1;
+    }
+
+    .menu.contacts-open {
+      transform: translate(-50%, calc(-50% - 56px));
     }
 
     .menu a,
@@ -130,7 +135,7 @@
     }
 
     .contact-links a {
-      font-size: clamp(14px, 2vw, 20px);
+      font-size: clamp(12px, 1.5vw, 16px);
       letter-spacing: 0.02em;
     }
 
@@ -184,6 +189,7 @@
 
   <script>
     const image = document.getElementById('draggableImage');
+    const menu = document.querySelector('.menu');
     const contactToggle = document.getElementById('contactToggle');
     const contactWrap = document.getElementById('contactWrap');
 
@@ -242,6 +248,7 @@
 
     contactToggle.addEventListener('click', () => {
       const isOpen = contactWrap.classList.toggle('open');
+      menu.classList.toggle('contacts-open', isOpen);
       contactToggle.setAttribute('aria-expanded', String(isOpen));
     });
 
