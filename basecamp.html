@@ -90,13 +90,15 @@
       transform:scaleX(1);
     }
 
-    .title{
+    /* Title now is an image (logo) */
+    .title-logo{
+      display: block;
+      height: clamp(22px, 3vw, 36px); /* same perceived size as previous title */
+      width: auto;
       margin: 0 0 18px 0;
-      font-size: clamp(22px, 3vw, 36px);
-      text-transform: uppercase;
-      letter-spacing: 0.06em;
-      font-weight: 700;
-      line-height: 1.05;
+      object-fit: contain;
+      user-select: none;
+      -webkit-user-drag: none;
     }
 
     .text{
@@ -296,10 +298,11 @@
   <main class="page">
     <a class="back" href="index.html">Back</a>
 
-    <h1 class="title">Basecamp</h1>
+    <!-- Title replaced by logo -->
+    <img class="title-logo" src="assets/basecamp.png" alt="Basecamp logo">
 
     <p class="text">Born as an extension of Quercia, “BASECAMP” is a project that transfers the clubbing concept within high-altitude environments, giving birth to a new and experimental blend, very far from what traditional “après-ski” experiences provide.
-On the occasion of the opening event, I created a tailored brand identity for the project:
+In occasion for the opening event, I created a tailored brand identity for the project:
 It follows a very technical and contemporary feel — a necessary trait shared by all outdoor clothing brands — while being loyal to the old mountain world heritage, by hinting slight vintage references, as if the brand existed already for decades and had been alive ever since.
 You will find a visual guide below.</p>
 
