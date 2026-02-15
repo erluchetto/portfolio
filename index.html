@@ -1,4 +1,3 @@
-```html
 <!doctype html>
 <html lang="it">
 <head>
@@ -6,7 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>L.N.D. Portfolio</title>
 
-  <!-- FAVICON -->
   <link rel="icon" type="image/png" sizes="32x32" href="favicon.png">
   <link rel="icon" type="image/png" sizes="16x16" href="favicon.png">
 
@@ -31,6 +29,7 @@
       z-index: 20;
       background: transparent;
     }
+
     .header-year h2{
       margin: 0;
       font-weight: 700;
@@ -54,33 +53,20 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      justify-content: center;
       gap: clamp(24px, 5vw, 60px);
-      pointer-events: auto;
-      user-select: none;
       z-index: 1;
     }
 
-    .menu a,
     .menu button{
-      text-decoration: none;
-      color: #111;
+      background: none;
+      border: 0;
       font-weight: 700;
       font-size: clamp(18px, 3vw, 30px);
       letter-spacing: 0.05em;
-      line-height: 1;
-      font-family: inherit;
-      background: none;
-      border: 0;
-      padding: 0;
       cursor: pointer;
+      position: relative;
     }
 
-    /* ===== Underline toggle (shared) ===== */
-    .toggle{
-      position: relative;
-      text-transform: uppercase;
-    }
     .toggle::after{
       content: "";
       position: absolute;
@@ -90,27 +76,21 @@
       height: 2px;
       background: #111;
       transform: scaleX(0);
-      transform-origin: left center;
-      transition: transform 260ms ease;
+      transform-origin: left;
+      transition: transform .3s ease;
     }
 
-    /* ===== PROJECTS solar system ===== */
-    .project-wrap{
-      position: relative;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      z-index: 1;
-    }
     .project-wrap.open .toggle::after{
       transform: scaleX(1);
     }
 
-    /* Orbit circle (projects) */
+    /* === ORBIT SYSTEM === */
+
     .orbit{
-      --orbit-size: clamp(200px, 38vw, 360px);
-      --planet-size: clamp(120px, 18vw, 190px);
-      --spin: 28s; /* slow orbit */
+      --orbit-size: clamp(240px, 40vw, 380px);
+      --planet-size: clamp(140px, 20vw, 210px);
+      --moon-size: clamp(70px, 10vw, 110px);
+      --spin: 32s;
 
       position: absolute;
       left: 50%;
@@ -121,322 +101,17 @@
       border-radius: 999px;
       border: 2px solid rgba(17,17,17,.45);
       opacity: 0;
-      pointer-events: none;
-      z-index: 0;
-      transition: opacity 220ms ease;
-      will-change: transform, opacity;
+      transition: opacity .3s ease;
     }
 
-    /* Rotating projects orbit (moves the planet around the outline) */
     .project-wrap.open .orbit{
       opacity: 1;
-      pointer-events: auto;
       animation: orbit-spin var(--spin) linear infinite;
     }
 
-    /* Keep the "sun" above the orbit */
-    .project-toggle{ z-index: 2; }
-
-    /* Planet anchor at center; we push it out so OUTLINES TOUCH */
     .planet-wrap{
       position: absolute;
       left: 50%;
       top: 50%;
-      width: 0;
-      height: 0;
-      transform: translate(-50%, -50%) translateX(calc((var(--orbit-size) / 2) - (var(--planet-size) / 2)));
-      will-change: transform;
-    }
-
-    /* Planet itself */
-    .planet{
-      width: var(--planet-size);
-      height: var(--planet-size);
-      border-radius: 999px;
-      background: #fff;
-      border: 2px solid rgba(17,17,17,.45);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      position: relative;
-      box-sizing: border-box;
-      transform-origin: 50% 50%;
-      will-change: transform;
-    }
-
-    /* IMPORTANT FIX:
-       Orbit rotates the whole .orbit (planet moves along the circle).
-       We counter-rotate ONLY the planet's content so it stays horizontal. */
-    .project-wrap.open .planet{
-      animation: planet-counterspin var(--spin) linear infinite;
-    }
-
-    .planet-label{
-      font-size: clamp(12px, 1.6vw, 18px);
-      letter-spacing: 0.06em;
-      color: rgba(17,17,17,.92);
-      line-height: 1;
-      font-weight: 700;
-      text-transform: uppercase;
-    }
-
-    /* Satellite around Quercia */
-    .satellite{
-      position: absolute;
-      left: 50%;
-      top: 50%;
-      transform-origin: center;
-      transform: translate(-50%, -50%) rotate(0deg) translateX(calc((var(--planet-size) / 2) + 18px));
-      color: rgba(17,17,17,.65);
-      font-size: clamp(11px, 1.25vw, 14px);
-      letter-spacing: 0.02em;
-      white-space: nowrap;
-      line-height: 1;
-      padding-left: 10px;
-    }
-    .satellite::before{
-      content:"";
-      position: absolute;
-      left: 0;
-      top: 50%;
-      width: 4px;
-      height: 4px;
-      border-radius: 999px;
-      background: rgba(17,17,17,.7);
-      transform: translateY(-50%);
-    }
-
-    .project-wrap.open .satellite{
-      animation: satellite-spin 10s linear infinite; /* slower satellite */
-    }
-    .project-wrap:not(.open) .satellite{
-      animation: none;
-    }
-
-    @keyframes orbit-spin{
-      from{ transform: translate(-50%, -50%) rotate(0deg); }
-      to{ transform: translate(-50%, -50%) rotate(360deg); }
-    }
-
-    /* Counter-rotate planet so QUERCIA stays readable while orbiting */
-    @keyframes planet-counterspin{
-      from{ transform: rotate(0deg); }
-      to{ transform: rotate(-360deg); }
-    }
-
-    @keyframes satellite-spin{
-      from{ transform: translate(-50%, -50%) rotate(0deg) translateX(calc((var(--planet-size) / 2) + 18px)); }
-      to{ transform: translate(-50%, -50%) rotate(360deg) translateX(calc((var(--planet-size) / 2) + 18px)); }
-    }
-
-    /* ===== CONTACTS dropdown ===== */
-    .contact-wrap{
-      position: relative;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-    }
-    .contact-wrap.open .toggle::after{
-      transform: scaleX(1);
-    }
-
-    .contact-links{
-      position: absolute;
-      top: calc(100% + clamp(28px, 4vw, 48px));
-      left: 50%;
-      transform: translateX(-50%) translateY(-10px);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: clamp(6px, 1.4vw, 12px);
-      opacity: 0;
-      pointer-events: none;
-      transition: opacity 260ms ease, transform 320ms ease;
-      z-index: 2;
-      white-space: nowrap;
-    }
-    .contact-wrap.open .contact-links{
-      opacity: 1;
-      transform: translateX(-50%) translateY(0);
-      pointer-events: auto;
-    }
-    .contact-links a{
-      font-size: clamp(12px, 1.5vw, 16px);
-      letter-spacing: 0.02em;
-    }
-
-    /* ===== Draggable cover ===== */
-    .floating-image{
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      z-index: 10;
-      touch-action: none;
-      cursor: grab;
-      will-change: transform;
-    }
-    .floating-image.dragging{ cursor: grabbing; }
-    .floating-image img{
-      width: var(--image-width);
-      height: auto;
-      display: block;
-      user-select: none;
-      -webkit-user-drag: none;
-    }
-
-    @media (prefers-reduced-motion: reduce){
-      .project-wrap.open .orbit{ animation: none; }
-      .project-wrap.open .planet{ animation: none; }
-      .project-wrap.open .satellite{ animation: none; }
-    }
-  </style>
-</head>
-
-<body>
-  <header class="header-year">
-    <h2>2026</h2>
-  </header>
-
-  <main class="stage">
-    <nav class="menu" aria-label="Main menu">
-
-      <!-- PROJECTS (solar system toggle) -->
-      <div class="project-wrap" id="projectWrap">
-        <button type="button"
-                class="toggle project-toggle"
-                id="projectToggle"
-                aria-expanded="false"
-                aria-controls="projectOrbit">
-          PROJECTS
-        </button>
-
-        <div class="orbit" id="projectOrbit" aria-hidden="true">
-          <!-- Planet sits ON the orbit outline (outlines touch) and orbits slowly -->
-          <div class="planet-wrap" aria-label="Quercia planet (orbiting)">
-            <div class="planet">
-              <span class="planet-label">QUERCIA</span>
-              <span class="satellite">Basecamp project</span>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- CONTACTS (dropdown toggle) -->
-      <div class="contact-wrap" id="contactWrap">
-        <button type="button"
-                class="toggle contact-toggle"
-                id="contactToggle"
-                aria-expanded="false"
-                aria-controls="contactLinks">
-          CONTACTS
-        </button>
-
-        <div class="contact-links" id="contactLinks">
-          <a href="mailto:lucanobili27@gmail.com">lucanobili27@gmail.com</a>
-          <a href="https://www.instagram.com/lukett0/" target="_blank" rel="noopener noreferrer">instagram</a>
-          <a href="https://www.linkedin.com/in/lucanobilidavach" target="_blank" rel="noopener noreferrer">linkedin</a>
-        </div>
-      </div>
-
-    </nav>
-
-    <div class="floating-image" id="draggableImage" aria-label="Draggable cover image">
-      <img src="assets/landing.png" alt="Cover image to drag" draggable="false">
-    </div>
-  </main>
-
-  <script>
-    const image = document.getElementById('draggableImage');
-
-    const projectToggle = document.getElementById('projectToggle');
-    const projectWrap = document.getElementById('projectWrap');
-    const projectOrbit = document.getElementById('projectOrbit');
-
-    const contactToggle = document.getElementById('contactToggle');
-    const contactWrap = document.getElementById('contactWrap');
-
-    // ===== Drag logic =====
-    let isDragging = false;
-    let dragStartX = 0;
-    let dragStartY = 0;
-    let offsetX = 0;
-    let offsetY = 0;
-
-    const applyTransform = () => {
-      image.style.transform = `translate(-50%, -50%) translate(${offsetX}px, ${offsetY}px)`;
-    };
-
-    const onDragMove = (clientX, clientY) => {
-      if (!isDragging) return;
-      offsetX = clientX - dragStartX;
-      offsetY = clientY - dragStartY;
-      applyTransform();
-    };
-
-    const startDrag = (clientX, clientY) => {
-      isDragging = true;
-      dragStartX = clientX - offsetX;
-      dragStartY = clientY - offsetY;
-      image.classList.add('dragging');
-    };
-
-    const endDrag = () => {
-      isDragging = false;
-      image.classList.remove('dragging');
-    };
-
-    image.addEventListener('mousedown', (e) => startDrag(e.clientX, e.clientY));
-    document.addEventListener('mousemove', (e) => onDragMove(e.clientX, e.clientY));
-    document.addEventListener('mouseup', endDrag);
-
-    image.addEventListener('touchstart', (e) => {
-      const touch = e.touches[0];
-      startDrag(touch.clientX, touch.clientY);
-    }, { passive: true });
-
-    document.addEventListener('touchmove', (e) => {
-      if (!isDragging) return;
-      const touch = e.touches[0];
-      onDragMove(touch.clientX, touch.clientY);
-      e.preventDefault();
-    }, { passive: false });
-
-    document.addEventListener('touchend', endDrag);
-
-    applyTransform();
-
-    // ===== Menu toggles =====
-    const setProjectOpen = (open) => {
-      projectWrap.classList.toggle('open', open);
-      projectToggle.setAttribute('aria-expanded', String(open));
-      projectOrbit.setAttribute('aria-hidden', String(!open));
-    };
-
-    const setContactOpen = (open) => {
-      contactWrap.classList.toggle('open', open);
-      contactToggle.setAttribute('aria-expanded', String(open));
-    };
-
-    projectToggle.addEventListener('click', () => {
-      const next = !projectWrap.classList.contains('open');
-      setProjectOpen(next);
-      if (next) setContactOpen(false);
-    });
-
-    contactToggle.addEventListener('click', () => {
-      const next = !contactWrap.classList.contains('open');
-      setContactOpen(next);
-      if (next) setProjectOpen(false);
-    });
-
-    window.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape') {
-        setProjectOpen(false);
-        setContactOpen(false);
-      }
-    });
-  </script>
-</body>
-</html>
-```
+      transform: translate(-50%, -50%) 
+                 translateX(calc((var(--orbit-size) / 2) - (var(--planet-size) / 2)))
