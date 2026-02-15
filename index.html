@@ -189,24 +189,39 @@
       font-weight: 700;
       text-transform: uppercase;
     }
-    
+
+    /* === Clickable Quercia planet link === */
+    .planet-link{
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      height: 100%;
+      border-radius: 999px;
+      cursor: pointer;
+    }
+
+    .planet-link:focus-visible{
+      outline: 2px solid rgba(17,17,17,.45);
+      outline-offset: 6px;
+    }
+
     /* === Logo styling inside planets === */
+    .planet-logo{
+      width: 100%;
+      height: auto;
+      object-fit: contain;
+      pointer-events: none;
+      user-select: none;
+    }
 
-.planet-logo{
-  width: 100%;
-  height: auto;
-  object-fit: contain;
-  pointer-events: none;
-  user-select: none;
-}
-
-.satellite-logo{
-  width: 120%;
-  height: auto;
-  object-fit: contain;
-  pointer-events: none;
-  user-select: none;
-}
+    .satellite-logo{
+      width: 120%;
+      height: auto;
+      object-fit: contain;
+      pointer-events: none;
+      user-select: none;
+    }
 
     /* ===== Basecamp as a smaller planet (moon) ===== */
     .satellite{
@@ -230,6 +245,19 @@
 
       /* IMPORTANT: keep orbit ALWAYS running (no snap on close) */
       animation: satellite-orbit var(--moon-spin) linear infinite;
+    }
+
+    /* NEW: make satellite behave like a clean clickable link */
+    a.satellite{
+      text-decoration: none;
+      cursor: pointer;
+      color: inherit;
+    }
+
+    /* NEW: focus ring for Basecamp too */
+    a.satellite:focus-visible{
+      outline: 2px solid rgba(17,17,17,.45);
+      outline-offset: 6px;
     }
 
     .satellite-text{
@@ -365,13 +393,14 @@
         <div class="orbit" id="projectOrbit" aria-hidden="true">
           <div class="planet-wrap" aria-label="Quercia planet (orbiting)">
             <div class="planet">
-              <img src="assets/quercia.png" class="planet-logo" alt="Quercia logo">
-              
-              <!-- Basecamp planet -->
-              <div class="satellite" aria-label="Basecamp planet">
+              <a class="planet-link" href="quercia.html" aria-label="Open Quercia project">
+                <img src="assets/quercia.png" class="planet-logo" alt="Quercia logo">
+              </a>
+
+              <!-- Basecamp planet (NOW clickable) -->
+              <a class="satellite" href="basecamp.html" aria-label="Open Basecamp project">
                 <img src="assets/basecamp.png" class="satellite-logo satellite-text" alt="Basecamp logo">
-              
-              </div>
+              </a>
 
             </div>
           </div>
