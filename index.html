@@ -45,7 +45,6 @@
       position: relative;
     }
 
-    /* MENU stays fixed: no shifting when toggles open */
     .menu{
       position: absolute;
       top: 50%; left: 50%;
@@ -106,67 +105,88 @@
       transform: scaleX(1);
     }
 
-    /* Orbit container: absolute, so menu doesn't move */
+    /* Orbit circle (like a molecular outline) */
     .orbit{
+      --orbit-size: clamp(200px, 38vw, 360px);
+
       position: absolute;
       left: 50%;
       top: 50%;
+      width: var(--orbit-size);
+      height: var(--orbit-size);
       transform: translate(-50%, -50%);
-      width: clamp(180px, 34vw, 320px);
-      height: clamp(180px, 34vw, 320px);
       border-radius: 999px;
       border: 2px solid rgba(17,17,17,.45);
       opacity: 0;
       pointer-events: none;
       z-index: 0;
-      will-change: transform, opacity;
       transition: opacity 220ms ease;
+      will-change: transform, opacity;
     }
+
+    /* Slow orbit rotation (moves the planet along the circle) */
     .project-wrap.open .orbit{
       opacity: 1;
       pointer-events: auto;
-      animation: orbit-spin 6.5s linear infinite;
+      animation: orbit-spin 26s linear infinite; /* FIX 4: much slower */
     }
 
-    /* Keep the text (sun) above the orbit line */
-    .project-toggle{
-      z-index: 2;
-    }
+    /* Keep the "sun" above the orbit */
+    .project-toggle{ z-index: 2; }
 
-    /* Planet that rides the orbit */
-    .planet{
+    /* Planet wrapper sits on the orbit radius */
+    .planet-wrap{
       position: absolute;
       left: 50%;
       top: 50%;
-      transform: translate(-50%, -50%) translateX(calc((clamp(180px, 34vw, 320px) / 2) - 12px));
+      transform: translate(-50%, -50%) translateX(calc((var(--orbit-size) / 2) - 16px));
+      transform-origin: 0 0;
+      will-change: transform;
+    }
+
+    /* Counter-rotation keeps planet text always horizontal/readable */
+    .project-wrap.open .planet-wrap{
+      animation: planet-counterspin 26s linear infinite; /* same duration as orbit */
+    }
+
+    /* Planet itself: outlined circle + white fill + label */
+    .planet{
       display: inline-flex;
       align-items: center;
       gap: 10px;
       white-space: nowrap;
+      user-select: none;
+    }
+
+    .planet-core{
+      width: 22px;
+      height: 22px;
+      border-radius: 999px;
+      background: #fff;                 /* FIX 2: white filled */
+      border: 2px solid rgba(17,17,17,.45); /* black outline like orbit */
+      flex: 0 0 auto;
+    }
+
+    .planet-label{
       font-size: clamp(12px, 1.5vw, 16px);
       letter-spacing: 0.02em;
       color: rgba(17,17,17,.9);
-      user-select: none;
-    }
-    .planet::before{
-      content:"";
-      width: 8px;
-      height: 8px;
-      border-radius: 999px;
-      background: #111;
-      display: inline-block;
-      opacity: .85;
+      line-height: 1;
     }
 
-    /* Satellite orbiting around the planet */
+    /* Satellite: "Basecamp project" orbiting around Quercia */
     .satellite{
       position: relative;
       display: inline-block;
+      margin-left: 10px;
       padding-left: 10px;
       color: rgba(17,17,17,.65);
       font-size: clamp(11px, 1.35vw, 14px);
       letter-spacing: 0.02em;
+      line-height: 1;
+      transform-origin: -10px 50%;
     }
+
     .satellite::before{
       content:"";
       position: absolute;
@@ -179,13 +199,11 @@
       transform: translateY(-50%);
     }
 
-    /* Satellite motion: rotate around planet label */
-    .planet .satellite{
-      transform-origin: -8px 50%;
-      animation: satellite-spin 2.4s linear infinite;
+    .project-wrap.open .satellite{
+      animation: satellite-spin 6.5s linear infinite; /* slower satellite too */
     }
-    /* Pause satellite when orbit is closed */
-    .project-wrap:not(.open) .planet .satellite{
+
+    .project-wrap:not(.open) .satellite{
       animation: none;
     }
 
@@ -194,14 +212,20 @@
       to{ transform: translate(-50%, -50%) rotate(360deg); }
     }
 
+    /* Counter rotation cancels orbit rotation so the label stays horizontal */
+    @keyframes planet-counterspin{
+      from{ transform: translate(-50%, -50%) translateX(calc((var(--orbit-size) / 2) - 16px)) rotate(0deg); }
+      to{ transform: translate(-50%, -50%) translateX(calc((var(--orbit-size) / 2) - 16px)) rotate(-360deg); }
+    }
+
     @keyframes satellite-spin{
-      from{ transform: rotate(0deg) translateX(0); }
-      to{ transform: rotate(360deg) translateX(0); }
+      from{ transform: rotate(0deg); }
+      to{ transform: rotate(360deg); }
     }
 
     /* ===== CONTACTS dropdown ===== */
     .contact-wrap{
-      position: relative; /* anchor for absolute dropdown */
+      position: relative;
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -257,7 +281,8 @@
 
     @media (prefers-reduced-motion: reduce){
       .project-wrap.open .orbit{ animation: none; }
-      .planet .satellite{ animation: none; }
+      .project-wrap.open .planet-wrap{ animation: none; }
+      .project-wrap.open .satellite{ animation: none; }
     }
   </style>
 </head>
@@ -281,9 +306,13 @@
         </button>
 
         <div class="orbit" id="projectOrbit" aria-hidden="true">
-          <div class="planet" aria-label="Quercia planet">
-            QUERCIA
-            <span class="satellite">Basecamp project</span>
+          <!-- FIX 1+2+3: Planet rides the orbit, has its own outlined circle, stays horizontal -->
+          <div class="planet-wrap" aria-label="Quercia planet (orbiting)">
+            <div class="planet">
+              <span class="planet-core" aria-hidden="true"></span>
+              <span class="planet-label">QUERCIA</span>
+              <span class="satellite">Basecamp project</span>
+            </div>
           </div>
         </div>
       </div>
@@ -387,18 +416,15 @@
     projectToggle.addEventListener('click', () => {
       const next = !projectWrap.classList.contains('open');
       setProjectOpen(next);
-      // optional: keep UI clean by closing the other toggle
       if (next) setContactOpen(false);
     });
 
     contactToggle.addEventListener('click', () => {
       const next = !contactWrap.classList.contains('open');
       setContactOpen(next);
-      // optional: keep UI clean by closing the other toggle
       if (next) setProjectOpen(false);
     });
 
-    // Close both on ESC
     window.addEventListener('keydown', (e) => {
       if (e.key === 'Escape') {
         setProjectOpen(false);
