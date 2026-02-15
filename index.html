@@ -181,15 +181,6 @@
       animation: planet-counterspin var(--spin) linear infinite;
     }
 
-    .planet-label{
-      font-size: clamp(12px, 1.6vw, 18px);
-      letter-spacing: 0.06em;
-      color: rgba(17,17,17,.92);
-      line-height: 1;
-      font-weight: 700;
-      text-transform: uppercase;
-    }
-
     /* === Clickable Quercia planet link === */
     .planet-link{
       display: flex;
@@ -247,25 +238,24 @@
       animation: satellite-orbit var(--moon-spin) linear infinite;
     }
 
-    /* NEW: make satellite behave like a clean clickable link */
-    a.satellite{
+    /* NEW: clickable area that fills the sphere */
+    .satellite-link{
+      width: 100%;
+      height: 100%;
+      border-radius: 999px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
       text-decoration: none;
       cursor: pointer;
-      color: inherit;
     }
 
-    /* NEW: focus ring for Basecamp too */
-    a.satellite:focus-visible{
+    .satellite-link:focus-visible{
       outline: 2px solid rgba(17,17,17,.45);
       outline-offset: 6px;
     }
 
     .satellite-text{
-      font-size: clamp(10px, 1.1vw, 13px);
-      letter-spacing: 0.02em;
-      line-height: 1.15;
-      color: rgba(17,17,17,.78);
-
       /* IMPORTANT: keep counterspin ALWAYS running (no snap on close) */
       animation: satellite-text-counterspin var(--moon-spin) linear infinite;
     }
@@ -397,10 +387,12 @@
                 <img src="assets/quercia.png" class="planet-logo" alt="Quercia logo">
               </a>
 
-              <!-- Basecamp planet (NOW clickable) -->
-              <a class="satellite" href="basecamp.html" aria-label="Open Basecamp project">
-                <img src="assets/basecamp.png" class="satellite-logo satellite-text" alt="Basecamp logo">
-              </a>
+              <!-- Basecamp planet: sphere restored + clickable link inside -->
+              <div class="satellite" aria-label="Basecamp planet">
+                <a class="satellite-link" href="basecamp.html" aria-label="Open Basecamp project">
+                  <img src="assets/basecamp.png" class="satellite-logo satellite-text" alt="Basecamp logo">
+                </a>
+              </div>
 
             </div>
           </div>
