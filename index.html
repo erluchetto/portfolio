@@ -60,7 +60,10 @@
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      gap: clamp(8px, 2vw, 16px);
+
+      /* FIX 1: increased distance between PROJECTS and CONTACTS */
+      gap: clamp(24px, 5vw, 60px);
+
       pointer-events: auto;
       user-select: none;
       z-index: 1;
@@ -113,7 +116,10 @@
     /* Dropdown is OUT of flow -> menu doesn't move */
     .contact-links {
       position: absolute;
-      top: calc(100% + clamp(10px, 2vw, 16px));
+
+      /* FIX 2: increased distance from CONTACTS to dropdown */
+      top: calc(100% + clamp(28px, 4vw, 48px));
+
       left: 50%;
       transform: translateX(-50%) translateY(-10px);
       display: flex;
