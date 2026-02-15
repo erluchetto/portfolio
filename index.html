@@ -1,3 +1,4 @@
+```html
 <!doctype html>
 <html lang="it">
 <head>
@@ -95,7 +96,7 @@
 
     /* ===== PROJECTS solar system ===== */
     .project-wrap{
-      position: relative; /* anchor for absolute orbit */
+      position: relative;
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -108,6 +109,8 @@
     /* Orbit circle (projects) */
     .orbit{
       --orbit-size: clamp(200px, 38vw, 360px);
+      --planet-size: clamp(120px, 18vw, 190px);
+      --spin: 28s; /* slow orbit */
 
       position: absolute;
       left: 50%;
@@ -124,60 +127,48 @@
       will-change: transform, opacity;
     }
 
-    /* Slow orbit rotation (moves the planet along the projects circle line) */
+    /* Rotating projects orbit (moves the planet around the outline) */
     .project-wrap.open .orbit{
       opacity: 1;
       pointer-events: auto;
-      animation: orbit-spin 26s linear infinite; /* slow */
+      animation: orbit-spin var(--spin) linear infinite;
     }
 
     /* Keep the "sun" above the orbit */
     .project-toggle{ z-index: 2; }
 
-    /*
-      PLANET: place the WHOLE planet ON the orbit outline.
-      We rotate the orbit container, so anything placed at radius sits on the line.
-    */
+    /* Planet anchor at center; we push it out so OUTLINES TOUCH */
     .planet-wrap{
       position: absolute;
       left: 50%;
       top: 50%;
-      transform: translate(-50%, -50%);
       width: 0;
       height: 0;
+      transform: translate(-50%, -50%) translateX(calc((var(--orbit-size) / 2) - (var(--planet-size) / 2)));
       will-change: transform;
     }
 
-    /* Push the planet out exactly to the orbit outline */
-    .planet-wrap .planet{
-      transform: translateX(calc((var(--orbit-size) / 2)));
-    }
-
-    /* Counter-rotation keeps the label always horizontal/readable */
-    .project-wrap.open .planet-wrap{
-      animation: planet-counterspin 26s linear infinite; /* matches orbit */
-    }
-
-    /*
-      FIX 1: Bigger Quercia circle + text centered inside it
-      FIX 2: Entire planet body sits on the orbit outline (the circle itself touches the outline)
-    */
+    /* Planet itself */
     .planet{
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      gap: 0;
-      white-space: nowrap;
-      user-select: none;
-
-      width: clamp(120px, 18vw, 190px);   /* bigger planet circle */
-      height: clamp(120px, 18vw, 190px);
+      width: var(--planet-size);
+      height: var(--planet-size);
       border-radius: 999px;
       background: #fff;
       border: 2px solid rgba(17,17,17,.45);
-
+      display: flex;
+      align-items: center;
+      justify-content: center;
       position: relative;
       box-sizing: border-box;
+      transform-origin: 50% 50%;
+      will-change: transform;
+    }
+
+    /* IMPORTANT FIX:
+       Orbit rotates the whole .orbit (planet moves along the circle).
+       We counter-rotate ONLY the planet's content so it stays horizontal. */
+    .project-wrap.open .planet{
+      animation: planet-counterspin var(--spin) linear infinite;
     }
 
     .planet-label{
@@ -189,13 +180,13 @@
       text-transform: uppercase;
     }
 
-    /* Satellite: orbits around Quercia (inside the planet boundary, like a moon) */
+    /* Satellite around Quercia */
     .satellite{
       position: absolute;
       left: 50%;
       top: 50%;
       transform-origin: center;
-      transform: translate(-50%, -50%) rotate(0deg) translateX(calc((clamp(120px, 18vw, 190px) / 2) + 18px));
+      transform: translate(-50%, -50%) rotate(0deg) translateX(calc((var(--planet-size) / 2) + 18px));
       color: rgba(17,17,17,.65);
       font-size: clamp(11px, 1.25vw, 14px);
       letter-spacing: 0.02em;
@@ -203,7 +194,6 @@
       line-height: 1;
       padding-left: 10px;
     }
-
     .satellite::before{
       content:"";
       position: absolute;
@@ -217,7 +207,7 @@
     }
 
     .project-wrap.open .satellite{
-      animation: satellite-spin 8.5s linear infinite; /* slower */
+      animation: satellite-spin 10s linear infinite; /* slower satellite */
     }
     .project-wrap:not(.open) .satellite{
       animation: none;
@@ -228,15 +218,15 @@
       to{ transform: translate(-50%, -50%) rotate(360deg); }
     }
 
-    /* Counter rotation cancels orbit rotation so the planet text stays horizontal */
+    /* Counter-rotate planet so QUERCIA stays readable while orbiting */
     @keyframes planet-counterspin{
-      from{ transform: translate(-50%, -50%) rotate(0deg); }
-      to{ transform: translate(-50%, -50%) rotate(-360deg); }
+      from{ transform: rotate(0deg); }
+      to{ transform: rotate(-360deg); }
     }
 
     @keyframes satellite-spin{
-      from{ transform: translate(-50%, -50%) rotate(0deg) translateX(calc((clamp(120px, 18vw, 190px) / 2) + 18px)); }
-      to{ transform: translate(-50%, -50%) rotate(360deg) translateX(calc((clamp(120px, 18vw, 190px) / 2) + 18px)); }
+      from{ transform: translate(-50%, -50%) rotate(0deg) translateX(calc((var(--planet-size) / 2) + 18px)); }
+      to{ transform: translate(-50%, -50%) rotate(360deg) translateX(calc((var(--planet-size) / 2) + 18px)); }
     }
 
     /* ===== CONTACTS dropdown ===== */
@@ -297,7 +287,7 @@
 
     @media (prefers-reduced-motion: reduce){
       .project-wrap.open .orbit{ animation: none; }
-      .project-wrap.open .planet-wrap{ animation: none; }
+      .project-wrap.open .planet{ animation: none; }
       .project-wrap.open .satellite{ animation: none; }
     }
   </style>
@@ -322,7 +312,7 @@
         </button>
 
         <div class="orbit" id="projectOrbit" aria-hidden="true">
-          <!-- Planet anchored at center; pushed to radius so its body sits on the orbit line -->
+          <!-- Planet sits ON the orbit outline (outlines touch) and orbits slowly -->
           <div class="planet-wrap" aria-label="Quercia planet (orbiting)">
             <div class="planet">
               <span class="planet-label">QUERCIA</span>
@@ -449,3 +439,4 @@
   </script>
 </body>
 </html>
+```
