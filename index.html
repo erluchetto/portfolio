@@ -189,6 +189,24 @@
       font-weight: 700;
       text-transform: uppercase;
     }
+    
+    /* === Logo styling inside planets === */
+
+.planet-logo{
+  width: 65%;
+  height: auto;
+  object-fit: contain;
+  pointer-events: none;
+  user-select: none;
+}
+
+.satellite-logo{
+  width: 70%;
+  height: auto;
+  object-fit: contain;
+  pointer-events: none;
+  user-select: none;
+}
 
     /* ===== Basecamp as a smaller planet (moon) ===== */
     .satellite{
@@ -347,11 +365,12 @@
         <div class="orbit" id="projectOrbit" aria-hidden="true">
           <div class="planet-wrap" aria-label="Quercia planet (orbiting)">
             <div class="planet">
-              <span class="planet-label">QUERCIA</span>
-
+              <img src="assets/quercia.png" class="planet-logo" alt="Quercia logo">
+              
               <!-- Basecamp planet -->
               <div class="satellite" aria-label="Basecamp planet">
-                <span class="satellite-text">Basecamp<br>project</span>
+                <img src="assets/basecamp.png" class="satellite-logo" alt="Basecamp logo">
+              
               </div>
 
             </div>
