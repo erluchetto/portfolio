@@ -49,13 +49,13 @@
       position: relative;
     }
 
+    /* MENU stays fixed: no shifting when dropdown opens */
     .menu {
       position: absolute;
       top: 50%;
       left: 50%;
       width: var(--image-width);
       transform: translate(-50%, -50%);
-      transition: transform 320ms ease;
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -64,10 +64,6 @@
       pointer-events: auto;
       user-select: none;
       z-index: 1;
-    }
-
-    .menu.contacts-open {
-      transform: translate(-50%, calc(-50% - 56px));
     }
 
     .menu a,
@@ -86,10 +82,10 @@
     }
 
     .contact-wrap {
+      position: relative; /* anchor for absolute dropdown */
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 0;
     }
 
     .contact-toggle {
@@ -114,24 +110,27 @@
       transform: scaleX(1);
     }
 
+    /* Dropdown is OUT of flow -> menu doesn't move */
     .contact-links {
+      position: absolute;
+      top: calc(100% + clamp(10px, 2vw, 16px));
+      left: 50%;
+      transform: translateX(-50%) translateY(-10px);
       display: flex;
       flex-direction: column;
       align-items: center;
       gap: clamp(6px, 1.4vw, 12px);
-      max-height: 0;
       opacity: 0;
-      overflow: hidden;
-      transform: translateY(-10px);
-      transition: max-height 320ms ease, opacity 260ms ease, transform 320ms ease, margin-top 320ms ease;
-      margin-top: 0;
+      pointer-events: none;
+      transition: opacity 260ms ease, transform 320ms ease;
+      z-index: 2;
+      white-space: nowrap;
     }
 
     .contact-wrap.open .contact-links {
-      max-height: 220px;
       opacity: 1;
-      transform: translateY(0);
-      margin-top: clamp(10px, 2vw, 16px);
+      transform: translateX(-50%) translateY(0);
+      pointer-events: auto;
     }
 
     .contact-links a {
@@ -172,8 +171,12 @@
   <main class="stage">
     <nav class="menu" aria-label="Main menu">
       <a href="#projects">PROJECTS</a>
+
       <div class="contact-wrap" id="contactWrap">
-        <button type="button" class="contact-toggle" id="contactToggle" aria-expanded="false" aria-controls="contactLinks">CONTACTS</button>
+        <button type="button" class="contact-toggle" id="contactToggle" aria-expanded="false" aria-controls="contactLinks">
+          CONTACTS
+        </button>
+
         <div class="contact-links" id="contactLinks">
           <a href="mailto:lucanobili27@gmail.com">lucanobili27@gmail.com</a>
           <a href="https://www.instagram.com/lukett0/" target="_blank" rel="noopener noreferrer">instagram</a>
@@ -189,7 +192,6 @@
 
   <script>
     const image = document.getElementById('draggableImage');
-    const menu = document.querySelector('.menu');
     const contactToggle = document.getElementById('contactToggle');
     const contactWrap = document.getElementById('contactWrap');
 
@@ -222,14 +224,8 @@
       image.classList.remove('dragging');
     };
 
-    image.addEventListener('mousedown', (e) => {
-      startDrag(e.clientX, e.clientY);
-    });
-
-    document.addEventListener('mousemove', (e) => {
-      onDragMove(e.clientX, e.clientY);
-    });
-
+    image.addEventListener('mousedown', (e) => startDrag(e.clientX, e.clientY));
+    document.addEventListener('mousemove', (e) => onDragMove(e.clientX, e.clientY));
     document.addEventListener('mouseup', endDrag);
 
     image.addEventListener('touchstart', (e) => {
@@ -248,7 +244,6 @@
 
     contactToggle.addEventListener('click', () => {
       const isOpen = contactWrap.classList.toggle('open');
-      menu.classList.toggle('contacts-open', isOpen);
       contactToggle.setAttribute('aria-expanded', String(isOpen));
     });
 
