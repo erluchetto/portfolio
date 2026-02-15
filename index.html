@@ -6,28 +6,19 @@
   <title>L.N.D. Portfolio</title>
 
   <style>
+    :root {
+      --image-width: min(420px, 72vw);
+    }
+
     html, body {
       height: 100%;
       margin: 0;
       background: #fff;
+      overflow: hidden;
+      font-family: 'Helvetica', sans-serif;
+      color: #111;
     }
 
-    .wrap {
-      height: 100%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      position: relative;
-    }
-
-    img {
-      width: 420px;
-      max-width: 70vw;
-      height: auto;
-      cursor: pointer;
-    }
-
-    /* Header Year */
     .header-year {
       position: fixed;
       top: 0;
@@ -35,124 +26,141 @@
       width: 100%;
       padding: 10px 0;
       text-align: center;
-      z-index: 10;
-      background: rgba(255, 255, 255, 0.8); /* leggera trasparenza */
+      z-index: 20;
+      background: rgba(255, 255, 255, 0.8);
     }
 
     .header-year h2 {
       margin: 0;
-      font-family: 'Helvetica', sans-serif;
-      font-weight: bold;
+      font-weight: 700;
       font-size: 28px;
-      color: #111;
+      letter-spacing: 0.06em;
     }
 
-    /* Draggable Image */
+    .stage {
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+    }
+
+    .menu {
+      width: var(--image-width);
+      display: flex;
+      justify-content: center;
+      gap: clamp(20px, 8vw, 64px);
+      margin-top: calc(var(--image-width) * 0.4);
+      pointer-events: auto;
+      user-select: none;
+    }
+
+    .menu a {
+      text-decoration: none;
+      color: #111;
+      font-weight: 700;
+      font-size: clamp(18px, 3vw, 30px);
+      letter-spacing: 0.08em;
+    }
+
     .floating-image {
       position: absolute;
-      cursor: grab;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
       z-index: 10;
       touch-action: none;
+      cursor: grab;
       will-change: transform;
-      transition: transform 0.1s ease-out;
     }
 
-    .floating-image:active {
+    .floating-image.dragging {
       cursor: grabbing;
     }
 
-    /* Draggable Image Animation */
     .floating-image img {
-      width: 420px;
-      max-width: 70vw;
+      width: var(--image-width);
       height: auto;
+      display: block;
+      user-select: none;
+      -webkit-user-drag: none;
     }
   </style>
 </head>
 
 <body>
-  <!-- Header with 2026 -->
   <header class="header-year">
-    <div class="container">
-      <h2>2026</h2>
-    </div>
+    <h2>2026</h2>
   </header>
 
-  <!-- Wrap for landing image -->
-  <div class="wrap">
-    <!-- Immagine statica rimosso -->
-  </div>
+  <main class="stage">
+    <nav class="menu" aria-label="Main menu">
+      <a href="#projects">PROJECTS</a>
+      <a href="#contact">CONTACT</a>
+    </nav>
 
-  <!-- Floating image (trascinabile) -->
-  <div class="floating-image" id="draggableImage">
-    <img src="assets/landing.png" alt="Draggable Image">
-  </div>
+    <div class="floating-image" id="draggableImage" aria-label="Draggable cover image">
+      <img src="assets/landing.png" alt="Cover image to drag" draggable="false">
+    </div>
+  </main>
 
   <script>
     const image = document.getElementById('draggableImage');
+
     let isDragging = false;
-    let startX, startY, currentX, currentY;
+    let dragStartX = 0;
+    let dragStartY = 0;
+    let offsetX = 0;
+    let offsetY = 0;
 
-    // Funzione per posizionare l'immagine trascinabile inizialmente centrata
-    image.style.transform = 'translate(-50%, -50%)';
-
-    // Funzione per il movimento dell'immagine
-    const onMove = (clientX, clientY) => {
-      if (!isDragging) return;
-      const dx = clientX - startX;
-      const dy = clientY - startY;
-      currentX = startX + dx;
-      currentY = startY + dy;
-
-      // Aggiorna la posizione dell'immagine
-      image.style.transform = `translate(${currentX}px, ${currentY}px)`;
+    const applyTransform = () => {
+      image.style.transform = `translate(-50%, -50%) translate(${offsetX}px, ${offsetY}px)`;
     };
 
-    // Inizia il drag
-    image.addEventListener('mousedown', (e) => {
+    const onDragMove = (clientX, clientY) => {
+      if (!isDragging) return;
+      offsetX = clientX - dragStartX;
+      offsetY = clientY - dragStartY;
+      applyTransform();
+    };
+
+    const startDrag = (clientX, clientY) => {
       isDragging = true;
-      startX = e.clientX;
-      startY = e.clientY;
-      currentX = 0;
-      currentY = 0;
-      document.addEventListener('mousemove', onMouseMove);
-      document.addEventListener('mouseup', onMouseUp);
+      dragStartX = clientX - offsetX;
+      dragStartY = clientY - offsetY;
+      image.classList.add('dragging');
+    };
+
+    const endDrag = () => {
+      isDragging = false;
+      image.classList.remove('dragging');
+    };
+
+    image.addEventListener('mousedown', (e) => {
+      startDrag(e.clientX, e.clientY);
     });
 
-    // Movimento con il mouse
-    const onMouseMove = (e) => onMove(e.clientX, e.clientY);
+    document.addEventListener('mousemove', (e) => {
+      onDragMove(e.clientX, e.clientY);
+    });
 
-    // Ferma il drag
-    const onMouseUp = () => {
-      isDragging = false;
-      document.removeEventListener('mousemove', onMouseMove);
-      document.removeEventListener('mouseup', onMouseUp);
-    };
+    document.addEventListener('mouseup', endDrag);
 
-    // Abilita il drag sui dispositivi touch
     image.addEventListener('touchstart', (e) => {
       const touch = e.touches[0];
-      isDragging = true;
-      startX = touch.clientX;
-      startY = touch.clientY;
-      currentX = 0;
-      currentY = 0;
-      document.addEventListener('touchmove', onTouchMove, { passive: false });
-      document.addEventListener('touchend', onTouchEnd);
-    });
+      startDrag(touch.clientX, touch.clientY);
+    }, { passive: true });
 
-    const onTouchMove = (e) => {
-      e.preventDefault();
+    document.addEventListener('touchmove', (e) => {
+      if (!isDragging) return;
       const touch = e.touches[0];
-      onMove(touch.clientX, touch.clientY);
-    };
+      onDragMove(touch.clientX, touch.clientY);
+      e.preventDefault();
+    }, { passive: false });
 
-    const onTouchEnd = () => {
-      isDragging = false;
-      document.removeEventListener('touchmove', onTouchMove);
-      document.removeEventListener('touchend', onTouchEnd);
-    };
+    document.addEventListener('touchend', endDrag);
+
+    applyTransform();
   </script>
-
 </body>
 </html>
