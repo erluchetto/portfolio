@@ -92,9 +92,9 @@
 
     /* Title now is an image (logo) */
     .title-logo{
-        display: block;
-  max-width: 380px;
-  height: auto;
+      display: block;
+      max-width: 380px;
+      height: auto;
     }
 
     .text{
@@ -279,6 +279,14 @@
       .thumb{ grid-column: span 12; }
     }
 
+    .empty{
+      display: none;
+      padding: 18px 2px 8px;
+      color: rgba(17,17,17,.65);
+      font-size: 13px;
+      letter-spacing: 0.02em;
+    }
+
     @media (prefers-reduced-motion: reduce){
       .window, .modal.open .window{ transition: none; }
       .folder-ico{ transition: none; }
@@ -294,7 +302,6 @@
   <main class="page">
     <a class="back" href="index.html">Back</a>
 
-    <!-- Title replaced by logo -->
     <img class="title-logo" src="assets/basecamp-portfolio.png" alt="Basecamp logo">
 
     <p class="text">Born as an extension of Quercia, “BASECAMP” is a project that transfers the clubbing concept within high-altitude environments, giving birth to a new and experimental blend, very far from what traditional “après-ski” experiences provide.
@@ -303,7 +310,6 @@ It follows a very technical and contemporary feel — a necessary trait shared b
 You will find a visual guide below.</p>
 
     <section class="folders" aria-label="Basecamp folders">
-      <!-- Moodboard folder -->
       <button class="folder" type="button" data-modal="moodboard" aria-label="Open moodboard folder">
         <div class="folder-ico" aria-hidden="true">
           <svg viewBox="0 0 180 140" fill="none">
@@ -326,7 +332,6 @@ You will find a visual guide below.</p>
         <div class="folder-label">Moodboard</div>
       </button>
 
-      <!-- Visual gallery folder -->
       <button class="folder" type="button" data-modal="gallery" aria-label="Open visual gallery folder">
         <div class="folder-ico" aria-hidden="true">
           <svg viewBox="0 0 180 140" fill="none">
@@ -368,26 +373,99 @@ You will find a visual guide below.</p>
       </div>
 
       <div class="content">
-        <div class="grid" id="modalGrid" aria-label="Folder content">
-          <!-- PLACEHOLDERS: replace with your images -->
-          <div class="thumb"><img src="assets/placeholder-1.jpg" alt=""></div>
-          <div class="thumb"><img src="assets/placeholder-2.jpg" alt=""></div>
-          <div class="thumb"><img src="assets/placeholder-3.jpg" alt=""></div>
-          <div class="thumb"><img src="assets/placeholder-4.jpg" alt=""></div>
-          <div class="thumb"><img src="assets/placeholder-5.jpg" alt=""></div>
-          <div class="thumb"><img src="assets/placeholder-6.jpg" alt=""></div>
-        </div>
+        <div class="grid" id="modalGrid" aria-label="Folder content"></div>
+        <div class="empty" id="emptyMsg">No files yet.</div>
       </div>
     </div>
   </div>
 
   <script>
+    // === Files (explicit list because GitHub Pages can't list directories) ===
+    const MOODBOARD_FILES = [
+      "065011bb3c186a3ab27e10cef7f607d3.jpg",
+      "2233c5a7c15f18e6eaedab3ca22082d3.jpg",
+      "22d136397e1c3126b9781daf998d1f96.jpg",
+      "2458153ea08dc537a81fe71673c2ee54.jpg",
+      "2bdb280f193f9b447dab9d3146270e21.jpg",
+      "2eeb4c3679b3893455191395214cb89f.jpg",
+      "408dc8579e7680f6778b0405ca58a457.jpg",
+      "47b4119827a3ef60300558f3f2cc9500.jpg",
+      "4cbd7b3c32333311309323b1d5d1f044.jpg",
+      "4eaa2aea55d69b82242867a240b5492c.jpg",
+      "5d982194a28eeb788a2d14bb50bafe69.jpg",
+      "605b004edeb49908b8a4ae2f49885bd5.jpg",
+      "6138194cf19eb41649fc5a5c0cacd3de.jpg",
+      "6910813dab288196e35e35663eaa6b79.jpg",
+      "77796030f43a85bbc128483a2bb73930.jpg",
+      "7a2089c5c7078259db7bcdd43cb71837.jpg",
+      "7da9d4d6f86b37f1e3317b54fe83c985.jpg",
+      "821a08275e5ad7c9afab0027cad5681e.jpg",
+      "885bfe206671a66b248cdb47f866b921.jpg",
+      "98e2b5772e307833484d9417e075544b.jpg",
+      "9a70cf623377377b73103571a2f42807.jpg",
+      "9b234d130404d6ed40a401cb1b68525a.jpg",
+      "9deac05ebe9f4aafd7a89bb31205a995.jpg",
+      "Screenshot 2026-02-12 at 02.13.12.png",
+      "b863f620146ab31da860d4c4cbf4cf08.jpg",
+      "bb8b6270aeb21291c7e58b7503069d97.jpg",
+      "c4781ec494a93c129a93ee919ad99897.jpg",
+      "c8fb0c26adb0d2d7366933db5aa61640.jpg",
+      "ca3815043b56aae88cf4dfbdf4e9bf0e.jpg",
+      "d7de1fb083b6d43e277377a6f31cd41f.jpg",
+      "f3f6034a592f48b77b48014a2345664b.jpg",
+      "fa60f7f382f5ab7310649f1d7c01f324.jpg"
+    ];
+
+    const GALLERY_FILES = [
+      "basecamp shooting 2.png",
+      "basecamp shooting 7.png",
+      "basecamp shooting 9.png",
+      "basecamp shoting 10.png",
+      "basecamp-ig.png",
+      "flyer chalet.png",
+      "quercia acg 3.png"
+    ];
+
+    // Folder paths (assumes assets/basecamp/moodboard and assets/basecamp/gallery)
+    const BASE_PATH = "assets/basecamp/";
+    const PATHS = {
+      moodboard: BASE_PATH + "moodboard/",
+      gallery: BASE_PATH + "gallery/"
+    };
+
     const modal = document.getElementById('modal');
     const closeBtn = document.getElementById('closeBtn');
     const modalTitle = document.getElementById('modalTitle');
+    const modalGrid = document.getElementById('modalGrid');
+    const emptyMsg = document.getElementById('emptyMsg');
+
+    const safeUrl = (folderPath, filename) => {
+      return folderPath + encodeURIComponent(filename).replace(/%2F/g, "/");
+    };
+
+    const buildGrid = (files, folderPath) => {
+      modalGrid.innerHTML = "";
+      emptyMsg.style.display = files.length ? "none" : "block";
+
+      files.forEach((name) => {
+        const wrap = document.createElement("div");
+        wrap.className = "thumb";
+
+        const img = document.createElement("img");
+        img.src = safeUrl(folderPath, name);
+        img.alt = "";
+
+        wrap.appendChild(img);
+        modalGrid.appendChild(wrap);
+      });
+    };
 
     const openModal = (type) => {
       modalTitle.textContent = (type === 'moodboard') ? 'Moodboard' : 'Visual Gallery';
+
+      if (type === "moodboard") buildGrid(MOODBOARD_FILES, PATHS.moodboard);
+      if (type === "gallery") buildGrid(GALLERY_FILES, PATHS.gallery);
+
       modal.classList.add('open');
       modal.setAttribute('aria-hidden', 'false');
       closeBtn.focus();
