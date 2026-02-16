@@ -31,6 +31,10 @@
       --folder-gloss: rgba(255,255,255,.25);
       --folder-shadow: 0 14px 40px rgba(0,0,0,.14);
       --folder-shadow-hover: 0 18px 55px rgba(0,0,0,.18);
+
+      /* Marquee */
+      --marquee-h: 64px;
+      --marquee-gap: 34px;
     }
 
     html, body{
@@ -90,11 +94,58 @@
       transform:scaleX(1);
     }
 
-    /* Title now is an image (logo) */
-    .title-logo{
+    /* ===== Basecamp marquee title ===== */
+    .logo-marquee{
+      margin: 10px 0 22px 0;
+      width: 100%;
+      user-select: none;
+      -webkit-user-select: none;
+      touch-action: pan-y; /* allow vertical scroll; we handle horizontal drag */
+    }
+
+    .marquee-viewport{
+      height: var(--marquee-h);
+      overflow: hidden;
+      position: relative;
+      cursor: grab;
+    }
+    .marquee-viewport:active{ cursor: grabbing; }
+
+    .marquee-track{
+      height: 100%;
+      display: flex;
+      align-items: center;
+      gap: var(--marquee-gap);
+      will-change: transform;
+      transform: translate3d(0,0,0);
+    }
+
+    .marquee-item{
+      flex: 0 0 auto;
+      height: calc(var(--marquee-h) - 10px);
+      width: auto;
       display: block;
-      max-width: 360px;
-      height: auto;
+      pointer-events: none; /* interaction is on the viewport */
+    }
+
+    /* subtle “mask” on edges for nicer look */
+    .marquee-viewport::before,
+    .marquee-viewport::after{
+      content:"";
+      position:absolute;
+      top:0;
+      width: 60px;
+      height:100%;
+      z-index: 2;
+      pointer-events:none;
+    }
+    .marquee-viewport::before{
+      left:0;
+      background: linear-gradient(to right, #fff 0%, rgba(255,255,255,0) 100%);
+    }
+    .marquee-viewport::after{
+      right:0;
+      background: linear-gradient(to left, #fff 0%, rgba(255,255,255,0) 100%);
     }
 
     .text{
@@ -155,8 +206,10 @@
     }
 
     @media (max-width: 640px){
-      :root{ --folder-w: 118px; --folder-h: 92px; }
+      :root{ --folder-w: 118px; --folder-h: 92px; --marquee-h: 58px; --marquee-gap: 28px; }
       .folders{ gap: 38px; }
+      .marquee-viewport::before,
+      .marquee-viewport::after{ width: 46px; }
     }
 
     /* ===== Modal (Finder window) ===== */
@@ -206,7 +259,6 @@
       gap: 8px;
       align-items: center;
     }
-    /* Make the dots clickable like macOS */
     .dot-btn{
       width: 12px;
       height: 12px;
@@ -239,8 +291,6 @@
     }
 
     .spacer{ flex: 1; }
-
-    /* Removed right-side close button */
     .close-btn{ display:none; }
 
     .content{
@@ -315,6 +365,7 @@
     @media (prefers-reduced-motion: reduce){
       .window, .modal.open .window{ transition: none; }
       .folder-ico{ transition: none; }
+      /* marquee: no inertia animation */
     }
   </style>
 </head>
@@ -327,7 +378,15 @@
   <main class="page">
     <a class="back" href="index.html">Back</a>
 
-    <img class="title-logo" src="assets/basecamp-portfolio.png" alt="Basecamp logo">
+    <!-- Replacing static logo with interactive marquee -->
+    <div class="logo-marquee" aria-label="Basecamp logo marquee">
+      <div class="marquee-viewport" id="marqueeViewport">
+        <div class="marquee-track" id="marqueeTrack" aria-hidden="true">
+          <!-- JS will duplicate enough items for seamless loop -->
+          <img class="marquee-item" src="assets/basecamp-portfolio.png" alt="">
+        </div>
+      </div>
+    </div>
 
     <p class="text">Born as an extension of Quercia, “BASECAMP” is a project that transfers the clubbing concept within high-altitude environments, giving birth to a new and experimental blend, very far from what traditional “après-ski” experiences provide.      
 In occasion of the opening event, I created a tailored brand identity for the project:
@@ -411,6 +470,205 @@ You will find a visual guide below.</p>
   </div>
 
   <script>
+    // ===== Interactive marquee physics =====
+    (function initMarquee(){
+      const prefersReduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+      const viewport = document.getElementById('marqueeViewport');
+      const track = document.getElementById('marqueeTrack');
+      if (!viewport || !track) return;
+
+      // Base autoplay speed (px/s). Negative = to left.
+      let baseSpeed = prefersReduced ? 0 : -55;
+
+      let x = 0;                 // current translateX
+      let v = baseSpeed;         // current velocity (px/s)
+      let lastT = performance.now();
+
+      let isDown = false;
+      let pointerId = null;
+      let lastPX = 0;
+      let lastMoveT = 0;
+      let lastDX = 0;
+
+      // friction / damping
+      const friction = prefersReduced ? 1.0 : 0.92;   // velocity multiplier per frame-ish
+      const maxV = 1800;                               // cap
+      const holdDeadZoneMs = 80;                       // treat "hold" as no-move
+
+      // We need enough items to loop seamlessly.
+      const seed = track.querySelector('.marquee-item');
+      const buildItems = () => {
+        // reset to a single seed
+        track.innerHTML = '';
+        track.appendChild(seed);
+
+        const vpW = viewport.clientWidth || 1;
+
+        // measure one item width including gap
+        const temp = seed.cloneNode(true);
+        track.appendChild(temp);
+
+        const gap = parseFloat(getComputedStyle(track).gap) || 0;
+        const w1 = seed.getBoundingClientRect().width || 1;
+        const itemStride = w1 + gap;
+
+        // remove temp
+        track.removeChild(temp);
+
+        // number of items to cover at least 2x viewport for safe looping
+        const needed = Math.ceil((vpW * 2) / itemStride) + 2;
+
+        for (let i = 0; i < needed; i++){
+          const node = seed.cloneNode(true);
+          track.appendChild(node);
+        }
+
+        // precompute loop length = itemStride * half of the items (we can loop on stride*count)
+        // Here we loop on totalStride of (itemStride * numberOfItems/2) to avoid visible “pattern” reset.
+        const count = track.children.length;
+        const loopLen = itemStride * Math.floor(count / 2);
+
+        return { itemStride, loopLen };
+      };
+
+      let geom = buildItems();
+
+      const normalize = () => {
+        // Keep x within [-loopLen, 0] range (or similar) to avoid big numbers
+        if (!geom.loopLen) return;
+        // bring x to [-loopLen, 0)
+        x = ((x % geom.loopLen) + geom.loopLen) % geom.loopLen;
+        x = -x;
+      };
+
+      const apply = () => {
+        track.style.transform = `translate3d(${x}px,0,0)`;
+      };
+
+      const clamp = (n, a, b) => Math.max(a, Math.min(b, n));
+
+      const step = (t) => {
+        const dt = Math.min(0.05, (t - lastT) / 1000); // cap dt to avoid jumps
+        lastT = t;
+
+        if (!prefersReduced){
+          if (!isDown){
+            // ease velocity back toward baseSpeed
+            const returnStrength = 0.035; // per frame-ish
+            v += (baseSpeed - v) * (1 - Math.pow(1 - returnStrength, dt * 60));
+            // apply friction
+            v *= Math.pow(friction, dt * 60);
+          }
+
+          // integrate
+          x += v * dt;
+          // loop
+          if (geom.loopLen){
+            // we loop by shifting x within range
+            if (x <= -geom.loopLen) x += geom.loopLen;
+            if (x >= 0) x -= geom.loopLen;
+          }
+        }
+
+        apply();
+        requestAnimationFrame(step);
+      };
+
+      // pointer interactions
+      const onDown = (e) => {
+        if (e.button !== undefined && e.button !== 0) return;
+        isDown = true;
+        pointerId = e.pointerId ?? null;
+        viewport.setPointerCapture?.(pointerId);
+
+        // HOLD should stop immediately
+        v = 0;
+
+        lastPX = e.clientX;
+        lastMoveT = performance.now();
+        lastDX = 0;
+      };
+
+      const onMove = (e) => {
+        if (!isDown) return;
+        if (pointerId !== null && e.pointerId !== pointerId) return;
+
+        const now = performance.now();
+        const dx = e.clientX - lastPX;
+
+        // drag: move content with finger
+        x += dx;
+        // loop wrap during drag
+        if (geom.loopLen){
+          if (x <= -geom.loopLen) x += geom.loopLen;
+          if (x >= 0) x -= geom.loopLen;
+        }
+
+        // track velocity from gesture
+        const dt = Math.max(0.001, (now - lastMoveT) / 1000);
+        const instV = dx / dt; // px/s
+
+        lastDX = dx;
+        lastPX = e.clientX;
+        lastMoveT = now;
+
+        // during drag we keep v=0; on release we will “throw”
+        apply();
+      };
+
+      const onUp = (e) => {
+        if (!isDown) return;
+        if (pointerId !== null && e.pointerId !== pointerId) return;
+
+        const now = performance.now();
+        const sinceMove = now - lastMoveT;
+
+        isDown = false;
+        viewport.releasePointerCapture?.(pointerId);
+        pointerId = null;
+
+        // if it was just a hold (no meaningful move), keep v=0
+        if (sinceMove > holdDeadZoneMs || Math.abs(lastDX) < 1.5){
+          v = 0;
+          return;
+        }
+
+        // “throw”: velocity equals last gesture direction (inverted? no: drag dx moves x directly)
+        // We keep same sign so it continues naturally.
+        const throwBoost = 1.0;
+        // estimate from lastDX and last dt (we stored dt indirectly; recompute approx)
+        // use a conservative throw to avoid insane speeds
+        v = clamp((lastDX / 0.016) * throwBoost, -maxV, maxV);
+      };
+
+      const onResize = () => {
+        const prevLoop = geom.loopLen || 1;
+        // keep visual position ratio
+        const ratio = x / prevLoop;
+
+        geom = buildItems();
+
+        x = ratio * (geom.loopLen || 1);
+        // snap x into range
+        if (geom.loopLen){
+          if (x <= -geom.loopLen) x += geom.loopLen;
+          if (x >= 0) x -= geom.loopLen;
+        }
+        apply();
+      };
+
+      viewport.addEventListener('pointerdown', onDown, { passive: true });
+      viewport.addEventListener('pointermove', onMove, { passive: true });
+      viewport.addEventListener('pointerup', onUp, { passive: true });
+      viewport.addEventListener('pointercancel', onUp, { passive: true });
+      window.addEventListener('resize', onResize);
+
+      normalize();
+      apply();
+      requestAnimationFrame(step);
+    })();
+
     // === Files (explicit list because GitHub Pages can't list directories) ===
     const MOODBOARD_FILES = [
       "065011bb3c186a3ab27e10cef7f607d3.jpg",
@@ -508,7 +766,6 @@ You will find a visual guide below.</p>
         wrap.appendChild(img);
         modalGrid.appendChild(wrap);
 
-        // Click to open full image
         wrap.addEventListener("click", () => openViewer(src));
         wrap.addEventListener("keydown", (e) => {
           if (e.key === "Enter" || e.key === " ") {
@@ -534,8 +791,6 @@ You will find a visual guide below.</p>
       modal.classList.remove('open');
       modal.setAttribute('aria-hidden', 'true');
       document.body.style.overflow = '';
-
-      // If viewer is open, close it too
       closeViewer();
     };
 
@@ -543,14 +798,12 @@ You will find a visual guide below.</p>
       btn.addEventListener('click', () => openModal(btn.dataset.modal));
     });
 
-    // Close ONLY via red dot (and also ESC / click outside as convenience)
     macClose.addEventListener('click', closeModal);
 
     modal.addEventListener('mousedown', (e) => {
       if (e.target === modal) closeModal();
     });
 
-    // Viewer close: click outside image
     viewer.addEventListener('mousedown', (e) => {
       if (e.target === viewer) closeViewer();
     });
