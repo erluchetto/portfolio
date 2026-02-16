@@ -24,13 +24,17 @@
       /* Folder */
       --folder-w: 132px;
       --folder-h: 98px;
-      --folder-radius: 16px;
-      --folder-fill: #1e6bff;
-      --folder-fill-2: #3a86ff;
-      --folder-tab: rgba(255,255,255,.22);
-      --folder-gloss: rgba(255,255,255,.25);
+      --folder-radius: 18px;
+
+      /* macOS-like red */
+      --folder-fill: #ff3b30;
+      --folder-fill-2: #ff6a5f;
       --folder-shadow: 0 14px 40px rgba(0,0,0,.14);
       --folder-shadow-hover: 0 18px 55px rgba(0,0,0,.18);
+
+      /* “active” look */
+      --folder-glow: 0 0 0 1px rgba(0,0,0,.08);
+      --folder-glow-hover: 0 0 0 1px rgba(0,0,0,.10);
 
       /* Marquee */
       --marquee-h: 64px;
@@ -175,6 +179,11 @@
       color: var(--text);
       font-family: inherit;
       user-select: none;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .folder:focus-visible{
+      outline: none;
     }
 
     .folder-ico{
@@ -184,11 +193,72 @@
       place-items: center;
       filter: drop-shadow(var(--folder-shadow));
       transition: transform 220ms ease, filter 220ms ease;
+      position: relative;
+      border-radius: var(--folder-radius);
+      transform-style: preserve-3d;
     }
 
+    /* subtle inner shadow + micro edge highlight (always on) */
+    .folder-ico::after{
+      content:"";
+      position:absolute;
+      inset: 10px 8px 12px 8px;
+      border-radius: 18px;
+      box-shadow:
+        inset 0 10px 18px rgba(0,0,0,.10),
+        inset 0 -10px 22px rgba(255,255,255,.20);
+      opacity: .55;
+      pointer-events:none;
+      transition: opacity 220ms ease;
+      mix-blend-mode: multiply;
+    }
+
+    /* shine sweep on hover */
+    .folder-ico::before{
+      content:"";
+      position:absolute;
+      inset: 8px 6px 12px 6px;
+      border-radius: 18px;
+      background: linear-gradient(
+        120deg,
+        rgba(255,255,255,0) 0%,
+        rgba(255,255,255,.32) 40%,
+        rgba(255,255,255,0) 70%
+      );
+      transform: translateX(-36%) rotate(0.001deg);
+      opacity: 0;
+      pointer-events:none;
+      transition: opacity 220ms ease, transform 420ms ease;
+      mix-blend-mode: screen;
+    }
+
+    /* “active” hover: lift + subtle tilt + glow */
     .folder:hover .folder-ico{
-      transform: translateY(-6px);
+      transform: translateY(-7px) scale(1.025) rotateX(3deg) rotateY(-3deg);
       filter: drop-shadow(var(--folder-shadow-hover));
+    }
+    .folder:hover .folder-ico::before{
+      opacity: .85;
+      transform: translateX(36%) rotate(0.001deg);
+    }
+    .folder:hover .folder-ico::after{
+      opacity: .62;
+    }
+
+    /* press state */
+    .folder:active .folder-ico{
+      transform: translateY(-2px) scale(0.992);
+      filter: drop-shadow(0 12px 34px rgba(0,0,0,.16));
+    }
+    .folder:active .folder-ico::before{
+      opacity: .35;
+      transform: translateX(10%) rotate(0.001deg);
+    }
+
+    /* focus ring like macOS (minimal) */
+    .folder:focus-visible .folder-ico{
+      box-shadow:
+        0 0 0 4px rgba(17,17,17,.10);
     }
 
     .folder-label{
@@ -365,6 +435,8 @@
     @media (prefers-reduced-motion: reduce){
       .window, .modal.open .window{ transition: none; }
       .folder-ico{ transition: none; }
+      .folder-ico::before,
+      .folder-ico::after{ transition: none; }
       /* marquee: no inertia animation */
     }
   </style>
@@ -396,19 +468,44 @@ You will find a visual guide below.</p>
     <section class="folders" aria-label="Basecamp folders">
       <button class="folder" type="button" data-modal="moodboard" aria-label="Open moodboard folder">
         <div class="folder-ico" aria-hidden="true">
-          <svg viewBox="0 0 180 140" fill="none">
-            <path d="M18 44C18 34.058 26.058 26 36 26H70C75.2 26 80.1 28.2 83.6 32L95 44H144C153.942 44 162 52.058 162 62V108C162 117.942 153.942 126 144 126H36C26.058 126 18 117.942 18 108V44Z"
-                  fill="url(#g1)"/>
-            <path d="M18 50C18 40.058 26.058 32 36 32H76C81.2 32 86.1 34.2 89.6 38L98.5 47.5C100.2 49.3 102.6 50.3 105.1 50.3H162V58H18V50Z"
-                  fill="rgba(255,255,255,.20)"/>
-            <path d="M22 60C22 54.477 26.477 50 32 50H148C153.523 50 158 54.477 158 60V64H22V60Z"
-                  fill="rgba(255,255,255,.18)"/>
-            <path d="M18 44C18 34.058 26.058 26 36 26H70C75.2 26 80.1 28.2 83.6 32L95 44H144C153.942 44 162 52.058 162 62V108C162 117.942 153.942 126 144 126H36C26.058 126 18 117.942 18 108V44Z"
-                  stroke="rgba(0,0,0,.10)" stroke-width="2"/>
+          <!-- macOS-like folder (red) -->
+          <svg viewBox="0 0 180 140" fill="none" aria-hidden="true">
+            <!-- tab/back -->
+            <path
+              d="M22 52c0-10 8.1-18 18.1-18H70c6 0 11.6 2.6 15.4 7l6.9 8H142c10 0 18 8.1 18 18v4H22v-19Z"
+              fill="url(#tabRedA)"
+              stroke="rgba(0,0,0,.10)"
+              stroke-width="1.5"
+            />
+            <!-- body/front -->
+            <path
+              d="M22 62c0-6.6 5.4-12 12-12h120c6.6 0 12 5.4 12 12v48c0 10-8.1 18-18 18H40c-10 0-18-8.1-18-18V62Z"
+              fill="url(#bodyRedA)"
+              stroke="rgba(0,0,0,.10)"
+              stroke-width="1.5"
+            />
+            <!-- top gloss -->
+            <path
+              d="M30 62c0-4.4 3.6-8 8-8h104c4.4 0 8 3.6 8 8v6H30v-6Z"
+              fill="rgba(255,255,255,.18)"
+            />
+            <!-- inner edge shine -->
+            <path
+              d="M28.8 64.5c0-4.7 3.8-8.5 8.5-8.5h105.4c4.7 0 8.5 3.8 8.5 8.5"
+              stroke="rgba(255,255,255,.24)"
+              stroke-width="2"
+              stroke-linecap="round"
+              opacity=".70"
+            />
             <defs>
-              <linearGradient id="g1" x1="18" y1="26" x2="162" y2="126" gradientUnits="userSpaceOnUse">
-                <stop stop-color="#2f7cff"/>
-                <stop offset="1" stop-color="#1e6bff"/>
+              <linearGradient id="tabRedA" x1="22" y1="34" x2="160" y2="80" gradientUnits="userSpaceOnUse">
+                <stop stop-color="var(--folder-fill-2)" />
+                <stop offset="1" stop-color="var(--folder-fill)" />
+              </linearGradient>
+              <linearGradient id="bodyRedA" x1="22" y1="50" x2="166" y2="132" gradientUnits="userSpaceOnUse">
+                <stop stop-color="var(--folder-fill-2)" />
+                <stop offset=".55" stop-color="var(--folder-fill)" />
+                <stop offset="1" stop-color="#e22b22" />
               </linearGradient>
             </defs>
           </svg>
@@ -418,21 +515,44 @@ You will find a visual guide below.</p>
 
       <button class="folder" type="button" data-modal="gallery" aria-label="Open visual gallery folder">
         <div class="folder-ico" aria-hidden="true">
-          <svg viewBox="0 0 180 140" fill="none">
-            <path d="M18 44C18 34.058 26.058 26 36 26H70C75.2 26 80.1 28.2 83.6 32L95 44H144C153.942 44 162 52.058 162 62V108C162 117.942 153.942 126 144 126H36C26.058 126 18 117.942 18 108V44Z"
-                  fill="url(#g2)"/>
-            <path d="M18 50C18 40.058 26.058 32 36 32H76C81.2 32 86.1 34.2 89.6 38L98.5 47.5C100.2 49.3 102.6 50.3 105.1 50.3H162V58H18V50Z"
-                  fill="rgba(255,255,255,.20)"/>
-            <path d="M22 60C22 54.477 26.477 50 32 50H148C153.523 50 158 54.477 158 60V64H22V60Z"
-                  fill="rgba(255,255,255,.18)"/>
-            <path d="M18 44C18 34.058 26.058 26 36 26H70C75.2 32 86.1 34.2 89.6 38L98.5 47.5C100.2 49.3 102.6 50.3 105.1 50.3H162V58H18V50Z"
-                  fill="rgba(255,255,255,.00)"/>
-            <path d="M18 44C18 34.058 26.058 26 36 26H70C75.2 26 80.1 28.2 83.6 32L95 44H144C153.942 44 162 52.058 162 62V108C162 117.942 153.942 126 144 126H36C26.058 126 18 117.942 18 108V44Z"
-                  stroke="rgba(0,0,0,.10)" stroke-width="2"/>
+          <!-- macOS-like folder (red) -->
+          <svg viewBox="0 0 180 140" fill="none" aria-hidden="true">
+            <!-- tab/back -->
+            <path
+              d="M22 52c0-10 8.1-18 18.1-18H70c6 0 11.6 2.6 15.4 7l6.9 8H142c10 0 18 8.1 18 18v4H22v-19Z"
+              fill="url(#tabRedB)"
+              stroke="rgba(0,0,0,.10)"
+              stroke-width="1.5"
+            />
+            <!-- body/front -->
+            <path
+              d="M22 62c0-6.6 5.4-12 12-12h120c6.6 0 12 5.4 12 12v48c0 10-8.1 18-18 18H40c-10 0-18-8.1-18-18V62Z"
+              fill="url(#bodyRedB)"
+              stroke="rgba(0,0,0,.10)"
+              stroke-width="1.5"
+            />
+            <!-- top gloss -->
+            <path
+              d="M30 62c0-4.4 3.6-8 8-8h104c4.4 0 8 3.6 8 8v6H30v-6Z"
+              fill="rgba(255,255,255,.18)"
+            />
+            <!-- inner edge shine -->
+            <path
+              d="M28.8 64.5c0-4.7 3.8-8.5 8.5-8.5h105.4c4.7 0 8.5 3.8 8.5 8.5"
+              stroke="rgba(255,255,255,.24)"
+              stroke-width="2"
+              stroke-linecap="round"
+              opacity=".70"
+            />
             <defs>
-              <linearGradient id="g2" x1="18" y1="26" x2="162" y2="126" gradientUnits="userSpaceOnUse">
-                <stop stop-color="#2f7cff"/>
-                <stop offset="1" stop-color="#1e6bff"/>
+              <linearGradient id="tabRedB" x1="22" y1="34" x2="160" y2="80" gradientUnits="userSpaceOnUse">
+                <stop stop-color="var(--folder-fill-2)" />
+                <stop offset="1" stop-color="var(--folder-fill)" />
+              </linearGradient>
+              <linearGradient id="bodyRedB" x1="22" y1="50" x2="166" y2="132" gradientUnits="userSpaceOnUse">
+                <stop stop-color="var(--folder-fill-2)" />
+                <stop offset=".55" stop-color="var(--folder-fill)" />
+                <stop offset="1" stop-color="#e22b22" />
               </linearGradient>
             </defs>
           </svg>
@@ -524,8 +644,6 @@ You will find a visual guide below.</p>
           track.appendChild(node);
         }
 
-        // precompute loop length = itemStride * half of the items (we can loop on stride*count)
-        // Here we loop on totalStride of (itemStride * numberOfItems/2) to avoid visible “pattern” reset.
         const count = track.children.length;
         const loopLen = itemStride * Math.floor(count / 2);
 
@@ -535,9 +653,7 @@ You will find a visual guide below.</p>
       let geom = buildItems();
 
       const normalize = () => {
-        // Keep x within [-loopLen, 0] range (or similar) to avoid big numbers
         if (!geom.loopLen) return;
-        // bring x to [-loopLen, 0)
         x = ((x % geom.loopLen) + geom.loopLen) % geom.loopLen;
         x = -x;
       };
@@ -549,23 +665,19 @@ You will find a visual guide below.</p>
       const clamp = (n, a, b) => Math.max(a, Math.min(b, n));
 
       const step = (t) => {
-        const dt = Math.min(0.05, (t - lastT) / 1000); // cap dt to avoid jumps
+        const dt = Math.min(0.05, (t - lastT) / 1000);
         lastT = t;
 
         if (!prefersReduced){
           if (!isDown){
-            // ease velocity back toward baseSpeed
-            const returnStrength = 0.035; // per frame-ish
+            const returnStrength = 0.035;
             v += (baseSpeed - v) * (1 - Math.pow(1 - returnStrength, dt * 60));
-            // apply friction
             v *= Math.pow(friction, dt * 60);
           }
 
-          // integrate
           x += v * dt;
-          // loop
+
           if (geom.loopLen){
-            // we loop by shifting x within range
             if (x <= -geom.loopLen) x += geom.loopLen;
             if (x >= 0) x -= geom.loopLen;
           }
@@ -575,14 +687,12 @@ You will find a visual guide below.</p>
         requestAnimationFrame(step);
       };
 
-      // pointer interactions
       const onDown = (e) => {
         if (e.button !== undefined && e.button !== 0) return;
         isDown = true;
         pointerId = e.pointerId ?? null;
         viewport.setPointerCapture?.(pointerId);
 
-        // HOLD should stop immediately
         v = 0;
 
         lastPX = e.clientX;
@@ -597,23 +707,21 @@ You will find a visual guide below.</p>
         const now = performance.now();
         const dx = e.clientX - lastPX;
 
-        // drag: move content with finger
         x += dx;
-        // loop wrap during drag
+
         if (geom.loopLen){
           if (x <= -geom.loopLen) x += geom.loopLen;
           if (x >= 0) x -= geom.loopLen;
         }
 
-        // track velocity from gesture
         const dt = Math.max(0.001, (now - lastMoveT) / 1000);
-        const instV = dx / dt; // px/s
+        const instV = dx / dt; // (kept for feel, not used directly)
+        void(instV);
 
         lastDX = dx;
         lastPX = e.clientX;
         lastMoveT = now;
 
-        // during drag we keep v=0; on release we will “throw”
         apply();
       };
 
@@ -628,29 +736,22 @@ You will find a visual guide below.</p>
         viewport.releasePointerCapture?.(pointerId);
         pointerId = null;
 
-        // if it was just a hold (no meaningful move), keep v=0
         if (sinceMove > holdDeadZoneMs || Math.abs(lastDX) < 1.5){
           v = 0;
           return;
         }
 
-        // “throw”: velocity equals last gesture direction (inverted? no: drag dx moves x directly)
-        // We keep same sign so it continues naturally.
         const throwBoost = 1.0;
-        // estimate from lastDX and last dt (we stored dt indirectly; recompute approx)
-        // use a conservative throw to avoid insane speeds
         v = clamp((lastDX / 0.016) * throwBoost, -maxV, maxV);
       };
 
       const onResize = () => {
         const prevLoop = geom.loopLen || 1;
-        // keep visual position ratio
         const ratio = x / prevLoop;
 
         geom = buildItems();
 
         x = ratio * (geom.loopLen || 1);
-        // snap x into range
         if (geom.loopLen){
           if (x <= -geom.loopLen) x += geom.loopLen;
           if (x >= 0) x -= geom.loopLen;
