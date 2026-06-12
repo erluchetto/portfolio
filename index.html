@@ -162,6 +162,11 @@
       will-change: transform;
     }
 
+    /* IDM anchor: same as Quercia but on the opposite side of the main orbit */
+    .planet-wrap-2{
+      transform: translate(-50%, -50%) rotate(180deg) translateX(calc((var(--orbit-size) / 2) - (var(--planet-size) / 2)));
+    }
+
     /* Quercia planet */
     .planet{
       width: var(--planet-size);
@@ -204,6 +209,10 @@
       object-fit: contain;
       pointer-events: none;
       user-select: none;
+    }
+
+    .planet-logo-flipped{
+      transform: rotate(180deg);
     }
 
     .satellite-logo{
@@ -398,6 +407,19 @@
                 </a>
               </div>
 
+            </div>
+          </div>
+
+          <!-- IDM planet: same dimensions as Quercia, on the opposite side of the main orbit -->
+          <div class="planet-wrap planet-wrap-2" aria-label="IDM planet (orbiting)">
+            <div class="planet">
+              <a class="planet-link"
+                 href="https://www.instagram.com/isoladimortorio/"
+                 target="_blank"
+                 rel="noopener noreferrer"
+                 aria-label="Open IDM Instagram">
+                <img src="assets/idm-logo-01.png" class="planet-logo planet-logo-flipped" alt="IDM logo">
+              </a>
             </div>
           </div>
         </div>
