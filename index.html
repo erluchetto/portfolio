@@ -1,0 +1,505 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Luca Nobili D’Avach</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=VT323&family=Special+Elite&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: an archive index. Fixed technical frame (top/bottom bars), giant uppercase prose, catalogue list; project pages invert to paper. */
+:root{
+  --blue:#262626;        /* matte black, the ground (token name kept) */
+  --blue-deep:#1C1C1C;
+  --paper:#F1F0EA;       /* warm off-white, slightly blue-biased shadows */
+  --paper-dim:rgba(241,240,234,.56);
+  --ink-dim:rgba(38,38,38,.5);
+  --line:rgba(241,240,234,.28);
+  --display:"VT323","IBM Plex Mono",ui-monospace,monospace;
+  --type:"Special Elite","Courier New",Courier,monospace;
+  --mono:"IBM Plex Mono",ui-monospace,Menlo,monospace;
+  --ease:cubic-bezier(.77,0,.18,1);
+  --ease-out:cubic-bezier(.16,1,.3,1);
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+html,body{background:var(--blue);color:var(--paper)}
+body{font-family:var(--display);-webkit-font-smoothing:antialiased;overflow-x:hidden;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+body.paper{background:var(--paper);color:var(--blue)}
+body,body *{transition:background-color .6s var(--ease),color .6s var(--ease),border-color .6s var(--ease)}
+a{color:inherit}
+::selection{background:var(--paper);color:var(--blue)}
+body.paper ::selection{background:var(--blue);color:var(--paper)}
+:focus-visible{outline:2px solid currentColor;outline-offset:3px}
+
+/* ---------- fixed frame ---------- */
+.bar{position:fixed;left:0;right:0;z-index:40;display:grid;grid-template-columns:1fr auto 1fr;gap:12px;
+  font:500 11px/1 var(--mono);letter-spacing:.06em;text-transform:uppercase;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));
+  mix-blend-mode:normal;pointer-events:none}
+.bar a,.bar button{pointer-events:auto}
+.bar.top{top:0;padding-top:calc(14px + env(safe-area-inset-top,0px));padding-bottom:14px}
+.bar.bot{bottom:0;padding-bottom:calc(14px + env(safe-area-inset-bottom,0px));padding-top:14px}
+.bar .c{text-align:center}.bar .r{text-align:right}
+.bar a{text-decoration:none}
+.bar a:hover{text-decoration:underline}
+.tag{white-space:nowrap}
+.blink{animation:blink 1s steps(1) infinite}
+@keyframes blink{50%{opacity:0}}
+
+/* ---------- views ---------- */
+main{padding-block:96px 120px;max-width:1600px;margin:0 auto}
+.view[hidden]{display:none!important}
+
+.meta-row{display:flex;flex-wrap:wrap;gap:8px 28px;font:400 11px/1.4 var(--mono);text-transform:uppercase;letter-spacing:.06em;opacity:.7;margin-bottom:28px}
+.meta-row span b{font-weight:500;opacity:1}
+
+/* empty opening screen + the letter sheet */
+/* stage: a sticky blue backdrop; the letter is an overlay that slides up over it */
+.stage{position:relative;margin-top:-96px}
+.hero{position:sticky;top:0;height:100svh;z-index:0;padding-block:62px 40px;
+  font:500 11px/1.5 var(--mono);letter-spacing:.06em;text-transform:uppercase}
+.hero .ruler{height:14px;background:repeating-linear-gradient(90deg,var(--line) 0 1px,transparent 1px 28px);opacity:.9}
+.hero .meta-row{margin:16px 0 0;opacity:.8;justify-content:space-between}
+.hero .hint{display:flex;justify-content:space-between;gap:16px;margin-top:10px;opacity:.7}
+.hero .arrow{display:inline-block;animation:nudge 1.6s var(--ease) infinite}
+@keyframes nudge{50%{transform:translateY(5px)}}
+.reg{position:absolute;width:26px;height:26px;border:1px solid var(--line);border-radius:50%}
+.reg::before,.reg::after{content:"";position:absolute;background:var(--paper-dim)}
+.reg::before{left:50%;top:-8px;bottom:-8px;width:1px}
+.reg::after{top:50%;left:-8px;right:-8px;height:1px}
+.reg.a{left:0;top:calc(100svh*.17)}.reg.b{right:0;top:calc(100svh*.17)}
+.reg.c{left:0;bottom:60px}.reg.d{right:0;bottom:60px}
+.sheet{--cream:#EAE6D9;--ink:#262626;--rule:rgba(38,38,38,.5);
+  position:relative;z-index:2;max-width:1040px;margin:-78svh auto 0;background:var(--cream);color:var(--ink);
+  padding-left:clamp(20px,5vw,72px);padding-right:clamp(20px,5vw,72px);
+  box-shadow:0 -30px 80px -20px rgba(0,0,0,.45),0 40px 90px -30px rgba(0,0,0,.55);
+  animation:sheetIn 1.5s 1.05s var(--ease-out) both}
+@keyframes sheetIn{from{transform:translateY(80svh) rotate(-1.8deg)}}
+.sheet ::selection{background:var(--ink);color:var(--cream)}
+.sheet a{color:inherit}
+/* the letter: typewritten, minimal */
+.letter{max-width:64ch;margin:0 auto;padding:clamp(36px,6vw,88px) 0 clamp(40px,6vw,96px);font:400 clamp(16px,1.35vw,19px)/1.7 var(--type);color:var(--ink)}
+.letter .dateline{display:flex;justify-content:space-between;gap:16px;margin-bottom:clamp(32px,5vw,64px)}
+.letter p{margin:0 0 1.25em}
+.letter .aside{opacity:.6}
+.letter a{text-decoration:underline;text-decoration-thickness:1px;text-underline-offset:.18em}
+.letter a:hover{text-decoration-style:dashed}
+.letter .signoff{margin-top:2.5em}
+.letter .sig{font:400 clamp(30px,3.6vw,46px)/1 var(--type);margin:.35em 0 .2em}
+.letter .contacts{display:flex;flex-wrap:wrap;gap:6px 22px;margin-top:1.6em}
+
+/* film grain over everything, like the VAA site */
+.grain{position:fixed;inset:-100%;z-index:75;pointer-events:none;opacity:.07;mix-blend-mode:overlay;background-size:220px 220px;animation:grain 1s steps(6) infinite}
+@keyframes grain{0%{transform:translate(0,0)}17%{transform:translate(-4%,3%)}33%{transform:translate(3%,-5%)}50%{transform:translate(-6%,-2%)}67%{transform:translate(5%,4%)}83%{transform:translate(-2%,6%)}100%{transform:translate(0,0)}}
+
+/* pixel display face: single weight, keep it crisp */
+html{font-synthesis-weight:none}
+.row .name,.p-title,.p-text,.next span,.curtain .big,.boot .n{font-weight:400!important;letter-spacing:0!important}
+.row .name{line-height:.82}.p-title{line-height:.8}
+
+/* ink bleed: type printed on translucent plastic */
+.bleed{filter:url(#bleed)}
+.bleed-soft{filter:url(#bleedSoft)}
+.row .name,.p-title,.p-text,.next span,.curtain .big,.boot .n,.foot{filter:url(#bleed)}
+.letter{filter:url(#bleedSoft)}
+.bar,.hero .meta-row,.hero .hint,.p-grid,.p-top,.index-head,.row .code,.row .type,.row .yr{filter:url(#bleedSoft)}
+.ghost{position:relative}
+.ghost::after{content:attr(data-ghost);position:absolute;left:0;top:0;width:100%;pointer-events:none;
+  transform:translate(.035em,.05em) scaleY(1.02);opacity:.08;filter:blur(5px)}
+
+/* intro: gionasssi-style prose, set on the sheet */
+.intro{display:grid;gap:.9em;font-weight:800;text-transform:uppercase;
+  font-size:clamp(24px,3.8vw,58px);line-height:.95;letter-spacing:-.025em;max-width:22ch}
+.intro p{margin:0;text-wrap:balance}
+.intro .aside{font:500 .2em/1.2 var(--mono);letter-spacing:.04em;vertical-align:.95em;margin-left:.5em;opacity:.75;white-space:nowrap}
+.intro a{text-decoration:none;background:linear-gradient(currentColor,currentColor) 0 92%/100% .06em no-repeat;transition:background-size .5s var(--ease)}
+.intro a:hover{background-size:0 .06em;background-position:100% 92%}
+.w{display:inline-block;overflow:hidden;vertical-align:top;padding-bottom:.06em;margin-bottom:-.06em}
+.w>span{display:inline-block;animation:rise 1s var(--ease-out) both}
+@keyframes rise{from{transform:translateY(105%)}}
+
+/* index list */
+.index-head{display:grid;grid-template-columns:7ch 1fr 14ch 6ch;gap:16px;margin-top:clamp(72px,10vw,150px);
+  padding-bottom:10px;border-bottom:1px solid var(--line);font:500 11px/1 var(--mono);letter-spacing:.06em;text-transform:uppercase;opacity:.7}
+.proj{list-style:none;margin:0;padding:0}
+.proj li{border-bottom:1px solid var(--line)}
+.row{position:relative;display:grid;grid-template-columns:7ch 1fr 14ch 6ch;gap:16px;align-items:baseline;
+  padding-block:clamp(14px,2vw,26px);text-decoration:none;color:inherit;isolation:isolate;overflow:hidden}
+.row::before{content:"";position:absolute;inset:0;background:var(--paper);z-index:-1;clip-path:inset(0 100% 0 0);transition:clip-path .55s var(--ease)}
+.row:hover::before,.row:focus-visible::before{clip-path:inset(0 0 0 0)}
+.row:hover,.row:focus-visible{color:var(--blue)}
+.row .code,.row .type,.row .yr{font:500 11px/1.3 var(--mono);letter-spacing:.06em;text-transform:uppercase}
+.row .name{font-weight:900;text-transform:uppercase;font-size:clamp(34px,7.4vw,124px);line-height:.86;letter-spacing:-.035em;
+  min-width:0;transition:transform .55s var(--ease)}
+.row:hover .name{transform:translateX(.18em)}
+.row .yr{text-align:right}
+.row .arr{position:absolute;right:0;top:50%;translate:0 -50%;font:500 clamp(24px,3vw,44px)/1 var(--mono);opacity:0;transition:opacity .4s,transform .55s var(--ease);transform:translateX(-30px)}
+.row:hover .arr{opacity:1;transform:none}
+
+/* floating preview */
+.preview{position:fixed;left:0;top:0;width:300px;aspect-ratio:4/3;max-width:100%;z-index:30;pointer-events:none;
+  background:var(--paper);border:1px solid var(--blue);opacity:0;transform:scale(.85);transition:opacity .25s,transform .4s var(--ease-out)}
+.preview.on{opacity:1;transform:scale(1)}
+.preview canvas{display:block;width:100%;height:100%}
+.preview .cap{position:absolute;left:8px;right:8px;bottom:6px;display:flex;justify-content:space-between;color:var(--blue);font:500 10px/1 var(--mono);letter-spacing:.06em;text-transform:uppercase}
+
+.foot{margin-top:clamp(60px,8vw,120px);display:grid;gap:.9em;font-weight:800;text-transform:uppercase;font-size:clamp(22px,3vw,44px);line-height:1;letter-spacing:-.02em;max-width:26ch}
+.foot p{margin:0}
+.foot a{text-decoration:underline;text-decoration-thickness:.07em;text-underline-offset:.1em}
+.foot .aside{font:500 .3em/1 var(--mono);letter-spacing:.04em;vertical-align:.9em;margin-left:.4em;opacity:.75}
+
+/* project page */
+.p-top{display:flex;justify-content:space-between;align-items:baseline;gap:16px;font:500 11px/1 var(--mono);letter-spacing:.06em;text-transform:uppercase}
+.p-top a{text-decoration:none}.p-top a:hover{text-decoration:underline}
+.p-title{font-weight:900;text-transform:uppercase;font-size:clamp(44px,8.5vw,150px);line-height:.82;letter-spacing:-.045em;margin:28px 0 0;text-wrap:balance;overflow-wrap:anywhere}
+.p-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px;margin-top:40px;padding-top:12px;border-top:1px solid var(--ink-dim);
+  font:400 11px/1.45 var(--mono);text-transform:uppercase;letter-spacing:.06em}
+.p-grid dt{opacity:.6}.p-grid dd{margin:4px 0 0;font-weight:500}
+.p-hero{position:relative;margin-top:40px;aspect-ratio:16/8;max-width:100%;background:var(--blue);overflow:hidden}
+.p-hero canvas{display:block;width:100%;height:100%}
+.p-hero .cap{position:absolute;left:12px;bottom:10px;right:12px;display:flex;justify-content:space-between;color:var(--paper);font:500 10px/1 var(--mono);letter-spacing:.06em;text-transform:uppercase}
+.p-text{margin-top:56px;display:grid;gap:.9em;font-weight:800;text-transform:uppercase;font-size:clamp(24px,3.6vw,56px);line-height:.98;letter-spacing:-.02em;max-width:24ch}
+.p-text p{margin:0;text-wrap:balance}
+.p-text .aside{font:500 .25em/1 var(--mono);letter-spacing:.04em;vertical-align:.9em;margin-left:.4em;opacity:.7;white-space:nowrap}
+.slots{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:16px;margin-top:64px}
+.slot{border:1px dashed var(--ink-dim);display:grid;place-items:center;font:500 11px/1 var(--mono);letter-spacing:.06em;text-transform:uppercase;opacity:.8;min-height:140px}
+.slot.a{grid-column:1/8;aspect-ratio:4/3}.slot.b{grid-column:9/13;aspect-ratio:3/4}.slot.c{grid-column:3/11;aspect-ratio:16/9}
+.next{display:block;margin-top:80px;padding-top:14px;border-top:1px solid var(--ink-dim);text-decoration:none}
+.next small{display:block;font:500 11px/1 var(--mono);letter-spacing:.06em;text-transform:uppercase;opacity:.7}
+.next span{display:inline-block;margin-top:10px;font-weight:900;text-transform:uppercase;font-size:clamp(40px,9vw,150px);line-height:.85;letter-spacing:-.04em;transition:transform .55s var(--ease)}
+.next:hover span{transform:translateX(.15em)}
+
+
+/* project logos, inked like the type */
+.pv-logo{position:absolute;left:12%;top:14%;width:76%;height:60%;color:var(--blue);fill:currentColor;filter:url(#bleed)}
+.p-head{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:end;gap:clamp(16px,3vw,48px);margin-top:28px}
+.p-head .p-title{margin:0}
+.p-logo{display:block;width:clamp(150px,28vw,420px);height:auto;max-width:100%;color:var(--blue);fill:currentColor;filter:url(#bleed)}
+@media (max-width:720px){.p-head{grid-template-columns:1fr}.p-logo{width:62%;justify-self:start}}
+/* contacts window, top-left corner */
+.ct-btn{all:unset;cursor:pointer;font:inherit;letter-spacing:inherit;pointer-events:auto}
+.ct-btn:hover,.ct-btn[aria-expanded="true"]{text-decoration:underline}
+.ct-btn:focus-visible{outline:2px solid currentColor;outline-offset:3px}
+.ct-panel{position:fixed;z-index:45;top:calc(38px + env(safe-area-inset-top,0px));left:max(16px,env(safe-area-inset-left,0px));
+  width:min(300px,calc(100vw - 32px));background:var(--paper);color:var(--blue);border:1px solid var(--blue);
+  font:500 11px/1.3 var(--mono);letter-spacing:.06em;text-transform:uppercase;box-shadow:0 24px 60px -24px rgba(0,0,0,.6);
+  animation:ctIn .45s var(--ease-out) both;filter:url(#bleed)}
+.ct-panel.closing{animation:ctOut .4s var(--ease) both;pointer-events:none}
+@keyframes ctIn{from{clip-path:inset(0 0 100% 0);transform:translateY(-6px)}to{clip-path:inset(0 0 0 0)}}
+@keyframes ctOut{from{clip-path:inset(0 0 0 0)}to{clip-path:inset(0 0 100% 0);transform:translateY(-6px)}}
+.ct-panel ::selection{background:var(--blue);color:var(--paper)}
+.ct-head{display:flex;justify-content:space-between;align-items:center;padding:9px 12px;border-bottom:1px solid var(--ink-dim)}
+.ct-head button{all:unset;cursor:pointer;font-size:16px;line-height:1;padding:0 2px}
+.ct-row{display:grid;gap:4px;padding:10px 12px}
+.ct-row+.ct-row{border-top:1px solid var(--ink-dim)}
+.ct-row a{display:flex;justify-content:space-between;text-decoration:none;font-size:13px}
+.ct-row a:hover{text-decoration:underline}
+.ct-val{display:flex;justify-content:space-between;gap:8px;text-transform:none;opacity:.7;user-select:all;min-width:0;overflow-wrap:anywhere}
+.ct-val button{all:unset;cursor:pointer;text-transform:uppercase;user-select:none;text-decoration:underline}
+
+/* transition curtain */
+.curtain{position:fixed;inset:0;z-index:60;background:var(--blue-deep);color:var(--paper);display:flex;flex-direction:column;justify-content:space-between;
+  padding:calc(20px + env(safe-area-inset-top,0px)) max(16px,env(safe-area-inset-right,0px)) calc(20px + env(safe-area-inset-bottom,0px)) max(16px,env(safe-area-inset-left,0px));
+  clip-path:inset(100% 0 0 0);pointer-events:none;font:500 11px/1 var(--mono);letter-spacing:.06em;text-transform:uppercase}
+.curtain.in{clip-path:inset(0 0 0 0);transition:clip-path .7s var(--ease)}
+.curtain.out{clip-path:inset(0 0 100% 0);transition:clip-path .7s var(--ease)}
+.curtain .big{font:900 clamp(48px,12vw,200px)/.85 var(--display);letter-spacing:-.04em}
+.curtain .bar-l{height:2px;background:var(--paper);transform-origin:left;transform:scaleX(0)}
+.curtain.in .bar-l{transform:scaleX(1);transition:transform .7s .15s var(--ease)}
+
+/* boot */
+.boot{position:fixed;inset:0;z-index:70;background:var(--blue);display:grid;place-items:center;font:500 12px/1.6 var(--mono);letter-spacing:.08em;text-transform:uppercase;
+  animation:bootOut .8s 1.1s var(--ease) forwards}
+.boot .n{font:900 clamp(64px,14vw,200px)/1 var(--display);letter-spacing:-.04em;font-variant-numeric:tabular-nums;text-align:center}
+@keyframes bootOut{to{clip-path:inset(0 0 100% 0);visibility:hidden}}
+.boot{clip-path:inset(0 0 0 0)}
+
+/* cursor */
+.cur{position:fixed;left:0;top:0;z-index:80;pointer-events:none;width:22px;height:22px;margin:-11px 0 0 -11px;transition:width .3s var(--ease-out),height .3s var(--ease-out),margin .3s var(--ease-out)}
+.cur::before,.cur::after{content:"";position:absolute;background:currentColor}
+.cur::before{left:50%;top:0;bottom:0;width:1px}
+.cur::after{top:50%;left:0;right:0;height:1px}
+.cur.big{width:56px;height:56px;margin:-28px 0 0 -28px}
+@media (hover:hover) and (pointer:fine){html,a,button{cursor:none}}
+@media not ((hover:hover) and (pointer:fine)){.cur,.preview{display:none}}
+
+/* responsive */
+@media (max-width:720px){
+  .index-head{grid-template-columns:5ch 1fr 4ch}
+  .index-head .type-h{display:none}
+  .row{grid-template-columns:5ch 1fr 4ch}
+  .row .type{grid-column:2;grid-row:2}
+  .row .arr{display:none}
+  .p-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .slot.a,.slot.b,.slot.c{grid-column:1/-1}
+  .bar .c{display:none}.bar{grid-template-columns:1fr 1fr}
+  .intro .aside,.p-text .aside{white-space:normal}
+
+}
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation:none!important;transition:none!important}
+  .boot{display:none}
+}
+</style>
+
+<div class="boot" aria-hidden="true">
+  <div>
+    <div>[ LND_ARCHIVE ] · LOADING INDEX</div>
+    <div class="n" id="bootN">000</div>
+    <div style="text-align:right">V. 002</div>
+  </div>
+</div>
+
+<header class="bar top">
+  <span class="tag"><button class="ct-btn" id="ctBtn" type="button" aria-expanded="false" aria-controls="ctPanel">[ CONTACTS ]</button></span>
+  <span class="c tag" id="pageTag">PAGE 00 / INDEX</span>
+  <span class="r tag">ROMA <span id="clock">--:--</span> · <span id="date">DD/MM/YY</span></span>
+</header>
+<footer class="bar bot">
+  <span class="tag">V. 002 — DRAFT<span class="blink">_</span></span>
+  <span class="c tag">LAST UPDATED 2026</span>
+  <span class="r tag" id="coords">X 0000 · Y 0000</span>
+</footer>
+
+<main>
+  <!-- HOME -->
+  <section class="view" id="v-index" aria-label="Index">
+    <div class="stage">
+      <div class="hero" aria-hidden="true">
+        <div class="ruler"></div>
+        <div class="meta-row">
+          <span><b>NAME:</b> LUCA NOBILI D’AVACH</span>
+          <span><b>BASE:</b> ROMA, IT</span>
+          <span><b>ENTRIES:</b> 004</span>
+          <span><b>STATUS:</b> OPEN TO WORK</span>
+        </div>
+        <i class="reg a"></i><i class="reg b"></i><i class="reg c"></i><i class="reg d"></i>
+      </div>
+      <article class="sheet" id="sheet" aria-label="Letter">
+        <div class="letter">
+          <div class="dateline"><span>Rome, <span id="sheetDate">16.10.26</span></span><span>L.N.D.</span></div>
+          <p>To whoever is reading,</p>
+          <p>I’m Luca Nobili D’Avach, a graphic designer, video maker and event promoter based in Rome. <span class="aside">(Milan is calling.)</span></p>
+          <p>I taught myself design on YouTube to make assets for my own projects. Then clients started asking.</p>
+          <p>I grew up on hip hop and sneaker culture, then fell for electronic music and started throwing events with <a href="#quercia" data-route="quercia">Quercia</a>.</p>
+          <p>I finished my master in 2025. Now I’m looking for the next room, in fashion, luxury, automotive or hospitality. <span class="aside">(Are you hiring?)</span></p>
+          <div class="signoff">
+            <div>Yours,</div>
+            <div class="sig">Luca</div>
+            <div class="contacts"><a href="mailto:lucanobili27@gmail.com">E-mail</a><a href="https://www.instagram.com/lukett0/" target="_blank" rel="noopener">Instagram</a><a href="https://www.linkedin.com/in/lucanobilidavach" target="_blank" rel="noopener">LinkedIn</a></div>
+          </div>
+        </div>
+      </article>
+    </div>
+
+    <div class="index-head" aria-hidden="true"><span>CODE</span><span>PROJECT</span><span class="type-h">TYPE</span><span style="text-align:right">YEAR</span></div>
+    <ul class="proj" id="projList"></ul>
+
+    <div class="foot">
+      <p>THAT’S THE INDEX FOR NOW. MORE ENTRIES SOON. <span class="aside">(I PROMISE)</span></p>
+    </div>
+  </section>
+
+  <!-- PROJECT -->
+  <section class="view" id="v-project" hidden aria-live="polite">
+    <div class="p-top">
+      <a href="#index" data-route="index">← INDEX</a>
+      <span id="pCode">LND-001</span>
+    </div>
+    <div class="p-head">
+      <h1 class="p-title ghost" id="pTitle" data-ghost="QUERCIA">QUERCIA</h1>
+      <svg class="p-logo" id="pLogo" hidden role="img" aria-label="Logo"><use id="pUse" href=""/></svg>
+    </div>
+    <dl class="p-grid" id="pGrid"></dl>
+    <div class="p-hero"><canvas id="heroCv"></canvas><div class="cap"><span id="heroCapL">FIG. 01</span><span>PLACEHOLDER VISUAL</span></div></div>
+    <div class="p-text" id="pText"></div>
+    <div class="slots">
+      <div class="slot a">[ IMAGE 02 — 4:3 ]</div>
+      <div class="slot b">[ IMAGE 03 — 3:4 ]</div>
+      <div class="slot c">[ VIDEO 01 — 16:9 ]</div>
+    </div>
+    <a class="next" id="pNext" href="#"><small>NEXT ENTRY →</small><span id="pNextName">ISOLA DI MORTORIO</span></a>
+  </section>
+</main>
+
+<div class="ct-panel" id="ctPanel" hidden>
+  <div class="ct-row"><a href="mailto:lucanobili27@gmail.com"><span>EMAIL</span><span>↗</span></a><span class="ct-val"><span id="ctMail">lucanobili27@gmail.com</span><button type="button" id="ctCopy">COPY</button></span></div>
+  <div class="ct-row"><a href="https://www.instagram.com/lukett0/" target="_blank" rel="noopener"><span>INSTAGRAM</span><span>↗</span></a></div>
+  <div class="ct-row"><a href="https://www.linkedin.com/in/lucanobilidavach" target="_blank" rel="noopener"><span>LINKEDIN</span><span>↗</span></a></div>
+</div>
+<div class="preview" id="preview" aria-hidden="true"><canvas id="prevCv"></canvas><svg class="pv-logo" id="pvLogo" hidden><use id="pvUse" href=""/></svg><div class="cap"><span id="prevL">LND-001</span><span id="prevR">FIG. 01</span></div></div>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+  <filter id="bleed" x="-10%" y="-20%" width="120%" height="140%" color-interpolation-filters="sRGB">
+    <feTurbulence type="fractalNoise" baseFrequency="0.85" numOctaves="2" seed="7" result="n"/>
+    <feDisplacementMap in="SourceGraphic" in2="n" scale="1.3" xChannelSelector="R" yChannelSelector="G" result="d"/>
+    <feGaussianBlur in="d" stdDeviation="2" result="b"/>
+    <feComponentTransfer in="b" result="halo"><feFuncA type="linear" slope="0.26"/></feComponentTransfer>
+    <feGaussianBlur in="d" stdDeviation="0.4" result="core"/>
+    <feMerge><feMergeNode in="halo"/><feMergeNode in="core"/></feMerge>
+  </filter>
+  <filter id="bleedSoft" x="-5%" y="-30%" width="110%" height="160%" color-interpolation-filters="sRGB">
+    <feTurbulence type="fractalNoise" baseFrequency="1.2" numOctaves="1" seed="3" result="n"/>
+    <feDisplacementMap in="SourceGraphic" in2="n" scale="0.6" xChannelSelector="R" yChannelSelector="G" result="d"/>
+    <feGaussianBlur in="d" stdDeviation="0.9" result="b"/>
+    <feComponentTransfer in="b" result="halo"><feFuncA type="linear" slope="0.2"/></feComponentTransfer>
+    <feGaussianBlur in="d" stdDeviation="0.22" result="core"/>
+    <feMerge><feMergeNode in="halo"/><feMergeNode in="core"/></feMerge>
+  </filter>
+</svg>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><defs>
+  <symbol id="logo-quercia" viewBox="0 0 807.61 163.22"><path d="M367.28,33.87v111.45h33.51v-55.96c4.15-.06,9.31-.25,13.2-.57l33.46,56.52h38.42l3.14.04v-4.5l-46.29-58.91c22.38-8.8,30.49-23.89,30.49-35.46,0-27.54-27.54-43.38-75.57-43.38h-3.14v3.14c0,16.85-4.66,27.85-27.23,27.85M399.91,81.13v-47.97c37.28.75,41.69,14.21,41.69,24.39,0,14.34-14.78,22.63-41.69,23.58Z"/><path d="M149.02,9.44h16.12c1.39,0,2.75.07,4.08.19s2.3.57,2.94,1.33c.63,1.02.98,2.31,1.04,3.89.06,1.58.09,3.19.09,4.83v64.85c0,.51-.03,1.04-.09,1.61-.07.57-.03,1.11.09,1.61v3.04c0,1.14-.03,2.34-.09,3.6-.07,1.27.03,2.4.28,3.42,0,.89.06,1.58.19,2.08.25,1.4.47,2.78.66,4.17.19,1.39.54,2.78,1.04,4.17,1.39,3.29,3.19,6,5.4,8.15,2.21,2.15,5.15,3.86,8.82,5.12,1.01.25,2.02.44,3.03.57,1.01.13,2.02.32,3.03.57.63.25,1.2.35,1.71.28.5-.06,1.07-.03,1.71.09.5.13,1.33.16,2.47.1,1.14-.06,1.89-.16,2.27-.28h2.84c1.01-.25,2.02-.44,3.03-.57,1.01-.13,1.96-.31,2.84-.57,1.77-.38,3.16-.82,4.17-1.33,2.27-1.01,4.27-2.37,5.97-4.08,1.71-1.71,3.06-3.63,4.08-5.78,1.39-3.29,2.21-7.17,2.47-11.66.25-4.48.38-9.13.38-13.94V21.77c0-1.77-.03-3.73-.09-5.88-.06-2.15.28-3.73,1.04-4.74.63-.76,1.52-1.23,2.65-1.42,1.14-.19,2.4-.28,3.79-.28h12.14c1.01,0,1.99-.03,2.94-.09.95-.06,1.86.03,2.75.28,1.77.38,2.91,1.01,3.41,1.89.63,1.02.92,2.44.85,4.27-.06,1.84-.09,3.51-.09,5.03v63.71c0,4.8-.06,9.48-.19,14.03-.13,4.55-.7,8.66-1.71,12.32-1.77,5.95-4.01,11.09-6.73,15.46-2.72,4.36-6.29,8.06-10.71,11.09-3.92,2.78-8.53,5.06-13.84,6.82-1.14.38-2.31.69-3.51.95-1.2.25-2.37.5-3.51.76-.76.25-1.49.38-2.18.38s-1.42.12-2.18.38c-1.52.25-3.22.44-5.12.57s-3.73.19-5.5.19c-12.01.12-22.25-1.36-30.72-4.46-8.47-3.09-15.11-8.12-19.91-15.07-1.64-2.27-3-4.65-4.08-7.11-1.07-2.46-2.06-5.15-2.94-8.06-.25-.63-.38-1.17-.38-1.61s-.13-.98-.38-1.61c-1.01-3.54-1.52-7.52-1.52-11.95V14.47c0-1.2.19-2.18.57-2.94.76-.88,1.77-1.52,3.03-1.89h.76c.25,0,.5-.06.76-.19Z"/><path d="M270.6,10.32h81.1c1.41,0,2.75.06,4.05.19,1.29.13,2.23.63,2.81,1.52.23.38.38.82.44,1.33.06.51.2,1.02.44,1.52v2.09c.12.89.15,1.83.09,2.84-.06,1.01-.09,1.96-.09,2.84,0,1.02.03,1.99.09,2.94.06.95.03,1.86-.09,2.75-.12.63-.17,1.58-.17,2.85-.35,1.51-.94,2.53-1.76,3.03-.7.51-1.58.76-2.64.76h-47.32c-.94,0-2.02-.03-3.25-.09s-2.46-.06-3.7,0c-1.23.06-2.37.19-3.43.38-1.06.19-1.82.48-2.29.86-.82.63-1.32,1.55-1.5,2.75-.18,1.2-.26,2.56-.26,4.08v16.3c.23,1.02.47,1.87.7,2.56.23.69.64,1.23,1.23,1.61.7.51,1.52.79,2.46.85.94.07,1.94.1,2.99.1h39.76c.82,0,1.85-.03,3.08-.1,1.23-.06,2.43-.06,3.61,0,1.17.07,2.26.16,3.25.28,1,.13,1.73.38,2.2.76.59.38,1,1.14,1.23,2.28.23,1.14.38,2.37.44,3.7.06,1.33.06,2.68,0,4.08-.06,1.39-.09,2.59-.09,3.6v2.66c0,.89-.12,1.64-.35,2.27-.24,1.02-.7,1.84-1.41,2.47-.59.38-1.38.63-2.37.76-1,.13-2.11.19-3.34.19s-2.46-.03-3.7-.09c-1.23-.06-2.26-.1-3.08-.1h-34.3c-1.41,0-2.76-.03-4.05-.1-1.29-.06-2.49,0-3.61.19-1.12.19-2.05.57-2.81,1.14-.76.57-1.32,1.42-1.67,2.56-.12.63-.18,1.3-.18,1.99v19.81c0,1.52.09,2.88.26,4.08.18,1.2.67,2.12,1.5,2.75.35.38.79.6,1.32.66s1.08.22,1.67.47h1.76c.58.13,1.23.16,1.93.1s1.35-.1,1.94-.1h52.51c.88,0,1.67.19,2.37.57.94.38,1.58,1.07,1.94,2.09.23.63.38,1.39.44,2.27.06.89.09,1.84.09,2.84v8.72c0,1.52-.06,2.94-.18,4.27-.12,1.33-.65,2.31-1.58,2.94-.7.63-1.61.95-2.73.95h-82.77c-1.64,0-3.08-.1-4.31-.28-1.23-.19-2.14-.79-2.73-1.8-.47-.76-.7-1.74-.7-2.94V15.06c0-1.14.23-2.02.7-2.65.47-.88,1.35-1.52,2.64-1.9.23-.13.47-.16.7-.1.23.07.47.03.7-.09Z"/><path d="M536.92,6.41c12.93-.25,23.59,2.02,31.97,6.82,8.37,4.81,15.03,11.19,19.96,19.15,1.35,2.15,2.46,4.33,3.33,6.54.86,2.22,1.66,4.65,2.4,7.3.24.89.49,1.9.74,3.04.24,1.14.18,2.21-.19,3.22-.25.76-.71,1.23-1.39,1.43-.68.19-1.45.41-2.31.66h-1.48c-.74.25-1.57.35-2.49.28-.92-.06-1.82-.09-2.68-.09-1.11,0-2.43.03-3.97.09-1.54.07-3.05.07-4.53,0-1.48-.06-2.84-.19-4.06-.38-1.23-.19-2.16-.48-2.77-.85-.99-.88-1.73-2.09-2.22-3.6s-1.11-2.84-1.85-3.98c-2.34-4.17-5.42-7.46-9.24-9.86-2.59-1.64-5.48-2.97-8.68-3.98-2.1-.76-4.71-1.14-7.86-1.14s-5.88.31-8.22.95c-.99.25-1.88.48-2.68.66-.8.19-1.63.47-2.49.85-8.38,3.67-14.29,9.73-17.74,18.2-.62,1.52-1.17,3.1-1.66,4.74-.49,1.64-1.05,3.35-1.66,5.12-.13.89-.25,1.71-.37,2.46-.12.76-.25,1.58-.37,2.47-.25.76-.34,1.55-.28,2.37.06.82-.03,1.68-.28,2.56-.25,1.01-.34,2.06-.28,3.13.06,1.07.09,2.12.09,3.13,0,.51-.03,1.02-.09,1.52-.06.51-.03,1.01.09,1.52v1.71c.24.63.34,1.26.28,1.89-.06.63.03,1.27.28,1.9,0,.76.12,1.77.37,3.03.24,1.39.49,2.69.74,3.89.24,1.2.55,2.37.92,3.51,1.72,5.31,3.94,9.83,6.65,13.56,2.71,3.73,6.28,6.8,10.72,9.2,1.35.63,2.77,1.17,4.25,1.61,1.48.45,3.08.92,4.8,1.42.62.13,1.2.22,1.76.28.55.07,1.14.1,1.76.1h1.48c.62.25,1.41.35,2.4.28.98-.06,1.79-.16,2.4-.28.74,0,1.3-.06,1.66-.19,1.48-.25,2.86-.51,4.16-.76,1.29-.25,2.56-.69,3.79-1.33,2.83-1.26,5.27-2.94,7.3-5.03,2.03-2.08,3.85-4.45,5.45-7.11.74-1.26,1.35-2.66,1.85-4.17.49-1.51,1.05-3.03,1.66-4.55.37-1.39.74-2.66,1.11-3.79.37-1.14,1.17-2.02,2.4-2.66.74-.25,1.66-.38,2.77-.38h17.83c1.17,0,2.12.25,2.86.76.86.63,1.32,1.64,1.39,3.04.06,1.39-.09,2.72-.46,3.98l-1.11,5.12c-.62,1.9-1.2,3.73-1.75,5.5-.55,1.77-1.27,3.48-2.13,5.12-.62,1.02-1.11,1.99-1.48,2.94-.37.95-.86,1.87-1.48,2.75-6.78,10.87-16.63,18.46-29.57,22.75-1.36.5-2.71.88-4.07,1.14-1.36.25-2.71.5-4.07.76-.62.25-1.2.35-1.75.28s-1.14.03-1.76.28c-.86,0-1.69.03-2.49.1-.8.06-1.63.16-2.49.28h-6.28c-1.11,0-2.16-.13-3.14-.38-.37-.13-.99-.19-1.85-.19-.86-.13-1.73-.25-2.59-.38-.86-.13-1.79-.25-2.77-.38-1.23-.38-2.44-.7-3.61-.95-1.17-.25-2.37-.57-3.6-.95-1.11-.38-2.22-.79-3.33-1.23s-2.16-.92-3.14-1.43c-7.39-3.28-13.64-7.68-18.75-13.18-5.11-5.5-9.27-12.04-12.47-19.62-.74-1.89-1.36-3.79-1.85-5.69-.5-1.9-1.05-3.86-1.66-5.88-.25-.63-.37-1.17-.37-1.61s-.06-.92-.18-1.43c-.25-1.14-.44-2.33-.56-3.6-.12-1.26-.31-2.47-.55-3.6-.25-.63-.34-1.17-.28-1.61s.03-.92-.09-1.42v-3.6c-.25-.63-.37-1.58-.37-2.84s.12-2.21.37-2.84c.12-.38.15-.79.09-1.23-.06-.44-.09-.79-.09-1.04v-1.71c.24-1.01.4-2.09.46-3.22.06-1.14.15-2.27.28-3.41.24-1.01.43-1.99.55-2.94.12-.95.31-1.92.55-2.94.49-1.77.92-3.51,1.3-5.21.37-1.71.86-3.32,1.48-4.83.62-1.64,1.26-3.29,1.94-4.93.68-1.64,1.45-3.16,2.31-4.55,1.97-3.54,4-6.7,6.1-9.48.61-.89,1.29-1.71,2.03-2.47.74-.76,1.48-1.52,2.22-2.27,3.08-3.16,6.31-5.85,9.7-8.06,3.39-2.21,7.23-4.2,11.55-5.98,1.48-.63,3.02-1.17,4.62-1.61,1.6-.44,3.26-.85,4.99-1.23.74-.25,1.48-.38,2.22-.38s1.41-.13,2.03-.38c.98-.13,1.94-.22,2.86-.28.92-.06,1.88-.16,2.86-.28.24-.13.55-.13.92,0,.37.13.68.13.92,0Z"/><path d="M608.4,10.23h16.3c1.39,0,2.72.03,3.98.1s2.21.54,2.85,1.42c.63.89.98,2.02,1.04,3.41.06,1.39.1,2.91.1,4.55v113.39c0,1.64.03,3.48.09,5.5.06,2.02-.22,3.54-.85,4.55-.51.89-1.64,1.58-3.41,2.09-.89.25-1.83.31-2.84.19s-2.02-.19-3.04-.19h-11.19c-1.39,0-2.68-.06-3.89-.19-1.2-.13-2.18-.51-2.94-1.14-.63-.63-1.02-1.58-1.14-2.85-.13-1.26-.19-2.59-.19-3.98V23.69c0-1.77-.03-3.85-.09-6.26-.07-2.4.22-4.11.85-5.12.5-.76,1.33-1.39,2.46-1.9.38,0,.73-.03,1.04-.09.31-.06.6-.1.85-.1Z"/><path d="M146.68,133.1l-1.63,1.2c-3.39,2.45-6.54,3.96-11.88,3.96-6.41,0-12.64-6.6-17.99-13.58,14.59-16.35,22.95-37.16,22.95-57.34C138.13,23.14,103.87,0,69.97,0c-17.54,0-22.82,1.32-25.71,3.46C16.53,24.71,0,52.63,0,78.22c0,45.08,25.52,70.98,69.97,70.98,7.48,0,15.85-2.58,24.34-7.48l2.14,2.58c9.74,12.2,15.09,18.92,32.32,18.92h1.19l20.18-26.59-3.46-3.52ZM18.36,56.34c0-6.29,1.63-13.65,4.65-21.07,5.81-2.9,11.23-5.05,16.47-6.4v77.82c-13.08-11.94-21.13-29.8-21.13-50.35ZM107.4,117.73c-1.19.42-4.61,1.62-8.48,2.56-3.27.8-8.17,1.72-14.45,1.95-2.04.15-4.83.26-8.14.04,0,0-9.95-.54-20.26-4.87V27.04c4.1-.04,7.82.23,11.08.63,4.21.68,10.25,2.12,16.91,5.37,1.82.89,9.35,4.68,17.04,12.38,6.27,6.27,9.84,12.33,11.45,15.32,1.52,2.82,4.32,8.1,5.98,15.66,1.51,6.85,1.37,12.4,1.24,14.84-.6,11.02-4.54,19.56-7.42,24.58-1.58.67-3.23,1.31-4.96,1.92Z"/><path d="M806.07,123.29l-1.14-2.14c-5.52.33-22.24-.56-26.26-.56-7.29,0-19.68-24.14-19.68-114.62l-.44-1.7-2.45-1.19-1.13.7c-8.36,5.28-16.79,10.06-27.42,10.06s-19.3-3.77-27.6-7.48c-7.41-3.27-14.46-6.35-22.19-6.35s-38.29,4.72-38.29,26.41c0,7.73,5.47,14.02,12.2,14.02,8.05,0,13.39-6.09,13.39-15.21,0-5.03-2.64-8.81-4.4-11.32-.32-.44-.7-.94-1.01-1.38.31-.12.75-.19,1.45-.19,4.27,0,9.62,4.9,14.83,9.56,4.03,3.71,8.11,7.41,12.38,9.62-11.06,3.65-28.92,8.36-36.27,9.69l-1.95.31v4.96h2.39c3.33,0,5.34.5,6.41,1.64.88.94,1.26,2.76,1.07,5.22l-5.53,62.37c-10.5,8.24-16.97,21.37-16.97,29.11v2.39h5.97l.56-1.51c2.27-5.47,7.24-8.55,14.09-8.55,6.22,0,13.51,2.83,21.18,5.79,8.24,3.2,16.79,6.48,24.78,6.48,20.56,0,27.85-21.88,27.85-40.68v-2.39h-6.73v2.39c0,2.51-.57,10.69-8.3,10.69-5.4,0-11.44-1.26-17.85-2.58-7.48-1.51-15.91-3.27-24.84-3.27-2.07,0-4.08.25-5.97.63,5.28-3.39,11.06-6.22,17.6-8.68l1.51-.56v-1.63c0-7.66.13-14.6.29-20.94h44.58c4.87,45.57,16.54,66.84,36.49,66.84l38.94-23.29-1.54-2.62ZM699.7,34.65l29.87-11.57c.05,16.35.47,30.44,1.32,42.7h-42.57c1.57-19.44,5.01-28.68,11.38-31.13Z"/></symbol>
+  <symbol id="logo-isola" viewBox="0 0 899.7 510.54"><path d="M0,299.18c.33-.08.47-.36.6-.62,1.87-3.88,4.8-6.84,8.2-9.39,3.73-2.8,7.81-5.01,11.97-7.07,2.01-.99,4.06-1.94,5.98-3.08,6.97-4.12,14.14-7.84,21.53-11.11,6.21-2.74,11.48-6.64,16.2-11.47,5.19-5.31,11.59-8.97,18.02-12.5,3.28-1.8,7.01-2.12,10.71-2.06,3.15.05,6.3.16,9.43.42,4.12.35,8.03-.22,11.83-1.91,7.47-3.31,15.37-3.64,23.37-3.1,11.66.79,22.96,3.2,33.88,7.37,3.18,1.21,6.53,1.39,9.92,1.59,6.39.38,12.5-.83,18.6-2.43,3.27-.86,6.66-1.05,10.03-1.24,6.14-.35,12.22-1.26,18.3-2.1,7.2-.99,14.39-2.04,21.67-2.3.97-.03,1.95-.09,2.92-.01,10.63.84,21.09-.63,31.56-2.14,4.23-.61,8.47-1.17,12.75-1.19,5.58-.03,10.59-1.66,15.06-5.02,5.69-4.28,11.41-8.51,17.14-12.74,1.69-1.24,3.42-2.43,5.3-3.38,3.03-1.53,6.24-2.12,9.59-1.72,2.3.28,4.26-.31,6.09-1.69,2.63-1.99,5.31-3.91,7.98-5.85.73-.53,1.45-1.08,2.23-1.51,2.31-1.29,4.2-1.13,6.2.61,1.69,1.47,3.63,2.34,5.79,2.81.99.22,1.7.23,1.96-1.06.64-3.08,2.69-4.54,5.75-4.69,3.86-.19,7.29-1.51,10.38-3.81,1.51-1.12,3.23-1.86,5.08-2.31.89-.21,1.61-.26,2,.78.36.97.95.98,1.73.39,1.13-.87,2.28-1.7,3.27-2.74,2.99-3.14,6.8-3.86,10.91-3.65,1.4.07,2.33.78,2.95,2.07.95,1.97,1.8,2.4,3.9,2.1,1.51-.21,2.87-.83,4.06-1.78.99-.8,1.97-1.62,2.98-2.39,1.63-1.23,3.38-1.81,5.47-1.26,2.62.7,5.21.45,7.69-.67,2.92-1.31,5.65-.95,8.34.68,3.08,1.87,6.29,3.48,9.84,4.26,1.17.26,2.35.5,3.54.63,2.1.22,3.9,1.07,5.42,2.48,2.26,2.1,4.89,3.41,7.88,4.08,2.27.51,4.42,1.39,6.54,2.33,2.88,1.27,5.81,2.38,9,2.63,2.59.2,4.69,1.53,6.51,3.26,2.81,2.66,6.12,4.54,9.47,6.39,1.92,1.06,3.68,1,5.46-.27.91-.65,1.88-1.22,2.84-1.81,1.45-.89,2.88-.81,4.16.28,1.43,1.21,2.84,2.45,4.16,3.78,1.56,1.56,3.23,2.51,5.59,2.19,2.16-.29,4.17.62,5.91,1.8,4.36,2.97,9.09,3.43,13.96,1.95,4.11-1.25,7.75-.78,11.34,1.54,2.56,1.65,5.15,3.44,8.27,3.89,2.37.34,4.77.45,7.16.58,2.17.12,4.35.14,6.52.2,2.63.06,4.99.81,7.04,2.53,1.55,1.3,3.17,2.51,4.78,3.74,1.81,1.39,3.77,2.45,6.11,2.59.7.04,1.32.32,1.88.68,1.77,1.15,3.73,1.51,5.79,1.5,1.51,0,2.97.18,4.41.67,2.89.97,5.9,1.14,8.89.92,6.29-.46,12.34.64,18.44,2.04,5.56,1.28,10.6,3.51,15.53,6.24,6.93,3.85,13.96,4.26,21.27.68,7.95-3.9,16.51-4.57,25.23-3.95,5.17.37,10.19,1.74,15.34,2.21,2.39.22,4.77.49,7.16.68,2.42.2,4.74.72,6.89,1.85,4.67,2.45,9.32,2.48,13.94-.13,3.55-2.01,7.32-1.98,11.13-1.11,3.79.87,7.6,1.68,11.27,3,3.64,1.3,7.41,1.6,11.03.32,6.99-2.47,13.9-2.33,20.96-.34,5.04,1.42,10.21,2.35,15.43,2.91,3.62.39,7.01,1.58,10.27,3.12,4.53,2.14,9.34,3.62,13.76,6.03,1.49.82,3.18,1.31,4.82,1.82,13.73,4.29,27.1,9.51,39.91,16.07,5.92,3.03,11.31,6.78,15.08,12.46.16.25.31.51.45.77.03.05,0,.14-.04.47-3.79.31-7.63.63-11.47.94-19.76,1.57-39.57.78-59.35.98-65.98.67-131.96.38-197.94.53-62.08.14-124.16.25-186.24.37-85.47.17-170.95.32-256.42.5-50.08.11-100.17.26-150.25.36-6.22.01-12.44-.19-18.67-.31-3.67-.07-7.34-.1-11.02.11-2.76.16-5.53.11-8.3.16,0-.15,0-.3,0-.45Z"/><path d="M148.67,433.79c.81-.18,1.12-.93,1.56-1.49,8.96-11.26,17.9-22.53,26.86-33.79.79-1,1.66-1.93,2.46-2.92,1.17-1.46,2.68-1.83,4.43-1.43,1.68.39,3.34.85,5.01,1.23,7.3,1.65,14.6,3.29,21.89,4.94.58.13,1.16.3,1.72.5.58.2,1.09.54,1.43,1.04,1.28,1.92.3,3.77-.3,5.58-.49,1.5-1.87,1.84-3.3,1.81-.97-.02-1.94-.2-2.91-.26-3.07-.2-3.61.17-4.65,3.01-1.43,3.88-2.11,7.95-3.05,11.95-3,12.75-5.92,25.51-8.86,38.27-.37,1.61-.65,3.23-.75,4.88-.11,1.69.5,2.87,2.11,3.56,1.3.56,2.55,1.23,3.88,1.74,2.2.85,2.68,1.82,2.32,4.2-.03.22-.06.45-.11.67-.64,3.29-1.93,4.17-5.24,3.4-6.12-1.43-12.23-2.92-18.33-4.4-5.89-1.43-11.76-2.91-17.66-4.31-5.13-1.21-4.78-3.67-3.28-7.49.45-1.15,1.46-1.7,2.71-1.61,1.49.11,2.98.31,4.47.42,3.13.23,3.63-.09,4.49-3.07,2.51-8.78,4.51-17.69,6.74-26.54,1.21-4.77,2.38-9.56,3.57-14.37-.83-.19-.99.43-1.27.78-11.43,13.99-22.84,27.99-34.25,41.99-.33.41-.7.79-.99,1.22-1.56,2.32-3.74,2.82-6.31,2.17-2.61-.66-4.06-2.31-4.46-5-1.45-9.85-2.99-19.69-4.44-29.54-1.13-7.7-2.17-15.42-3.26-23.13-.09-.65-.27-1.29-.41-1.96-.94.37-.91,1.24-1.11,1.9-3.39,10.93-6.72,21.88-10.1,32.82-.4,1.31-.51,2.64-.71,3.97-.29,1.92.46,3.4,2.16,4.3,1.59.84,3.23,1.56,4.86,2.32,1.24.57,2.61,1.08,2.75,2.66.17,1.99-.25,3.91-1.7,5.4-.96.98-2.25.74-3.41.43-1.95-.52-3.87-1.14-5.8-1.73-6.79-2.09-13.58-4.19-20.36-6.29-.14-.04-.28-.1-.42-.15-1.52-.48-3.14-.9-3.31-2.87-.18-2.12.41-4.01,2.04-5.47.82-.73,1.84-.54,2.8-.38,1.33.21,2.64.57,3.97.77,2.63.4,3.47-.08,4.65-2.44.71-1.41,1.15-2.93,1.62-4.42,3.97-12.63,7.91-25.27,11.87-37.91.92-2.93,1.89-5.84,2.82-8.76.27-.85.55-1.71.73-2.59.4-2.01.12-2.69-1.62-3.73-1.15-.69-2.39-1.24-3.59-1.84-2.14-1.06-2.57-1.97-2.04-4.34.05-.22.08-.44.15-.66.99-3.39,2.18-4.03,5.62-3.01,8.53,2.52,16.97,5.38,25.55,7.74,2.11.58,3.2,1.93,3.49,4.15.96,7.43,1.98,14.84,3.05,22.25,1.19,8.23,2.46,16.44,3.7,24.66.06.42.06.9.55,1.17Z"/><path d="M246.02,22.12c2.02,0,4.04-.05,6.06.02.93.04,1.41-.3,1.58-1.16.24-1.2.5-2.44,1.79-2.92,1.69-.62,3.44-1.18,5.26-.82,1.58.31,2.01,1.67,2.3,3.02.63,3,1.22,6.01,1.82,9.02.88,4.48,1.76,8.96,2.62,13.44.55,2.88-.19,3.98-3.05,4.66-.51.12-1.02.24-1.53.34-1.83.34-3.22-.27-4.15-1.92-1.03-1.83-2.15-3.61-3.51-5.21-3.63-4.25-7.83-7.7-13.47-8.78-4.82-.92-9.43-.1-13.46,2.83-3.15,2.3-3.95,5.67-2.44,9.16.82,1.91,2.18,3.12,4.18,3.77,5.27,1.72,10.65,3.02,16.06,4.21,3.95.87,7.88,1.77,11.82,2.69,1.97.46,3.86,1.19,5.69,2.05,12.2,5.77,17.35,18.73,12.43,31.3-2.91,7.42-8,12.72-15.37,15.81-8.66,3.62-17.61,5.26-26.99,4.1-.52-.06-1.05-.06-1.57-.06-.93-.01-1.47.37-1.78,1.34-.9,2.82-3.18,4.23-6.11,3.98-1.09-.09-1.8-.68-2.32-1.55-.5-.84-.75-1.78-.99-2.73-1.99-7.83-4-15.66-6-23.48-.13-.51-.28-1.01-.34-1.53-.24-2.17.26-3.01,2.41-3.62,5.34-1.5,5.03-.91,7.23,2.68,1.52,2.49,2.98,5.04,4.85,7.29,4.42,5.31,9.99,8.26,17.01,8.07,3.29-.09,6.33-1.16,9.07-2.96,3.37-2.22,4.07-5.59,3.55-9.3-.47-3.33-2.58-5.22-5.73-6.2-6.44-2-13.03-3.38-19.58-4.92-4.59-1.08-9.13-2.35-13.38-4.46-8.13-4.03-12.61-10.77-12.82-19.65-.25-10.6,4.2-19.07,14-24,7.8-3.92,16.18-5.25,24.86-4.5Z"/><path d="M425.02,437.12c-7.97-.62-14.04,3.47-16.4,11.06-.42,1.36-.64,2.77-1.06,4.13-.66,2.16-1.76,2.89-4.02,2.75-.67-.04-1.35-.13-2-.27-1.79-.39-2.6-1.27-2.6-3.12,0-2.4.1-4.79.22-7.19.24-4.64.52-9.28.79-13.91.19-3.15,1.18-4.15,4.34-4.09,5.32.11,10.64.27,15.96.49,16.86.69,33.72.9,50.58.79,4.36-.03,5.12.76,5.2,5.05.12,6.14.23,12.29.33,18.43.01.75.02,1.51-.12,2.24-.33,1.72-1.35,2.59-3.08,2.72-.6.05-1.2.02-1.8,0-2.66-.07-3.29-.65-3.97-3.3-.53-2.02-1.08-4.05-1.81-6.01-1.99-5.33-5.94-8.27-11.5-9.17-.44-.07-.9-.07-1.34-.16-2.05-.42-2.16-.6-2.25,1.93-.08,2.1-.06,4.2-.08,6.29-.16,15.51-.31,31.02-.46,46.53-.02,1.8,0,3.59.3,5.38.28,1.69,1.18,2.66,2.85,3.02,1.55.33,3.12.39,4.69.48,3.71.24,5.27,2.49,4.32,6.09-.41,1.57-1.36,2.48-2.91,2.72-.88.13-1.79.14-2.69.12-12.96-.23-25.93-.48-38.89-.73-1.05-.02-2.11-.02-3.14-.21-1.64-.29-2.96-1.11-3.48-2.81-.55-1.78-.08-3.41.96-4.88.51-.72,1.35-.91,2.19-.96,1.65-.1,3.3-.14,4.94-.29,3.06-.28,4.04-1.24,4.43-4.31.09-.67.13-1.34.15-2.02.33-11.54.65-23.07.97-34.61.18-6.52.36-13.03.52-19.55.02-.88.2-1.79-.16-2.65Z"/><path d="M426.35,82.19c-7.79.36-15.57.72-23.36,1.09-3.07.15-6.14.33-9.21.48-1.45.07-2.9.09-3.69-1.48-.88-1.75-1.22-3.55-.29-5.39.51-1.01,1.48-1.47,2.51-1.73,1.09-.27,2.21-.37,3.3-.65,2.62-.68,3.52-1.77,3.44-4.47-.14-4.34-.38-8.68-.62-13.02-.54-9.8-1.09-19.6-1.65-29.4-.24-4.19-.48-8.38-.8-12.56-.23-2.99-1.23-3.91-4.2-4.16-1.34-.11-2.69-.22-4.03-.35-.37-.03-.77-.03-1.11-.17-2.25-.88-2.03-2.94-2.11-4.76-.09-2.13.49-3.01,2.09-3.49.49-.15,1.03-.21,1.54-.24,10.26-.46,20.52-.92,30.77-1.37,4.12-.18,8.24-.34,12.36-.49.82-.03,1.65-.02,2.47.06,1.03.1,1.87.61,2.3,1.57.76,1.72.76,3.53.17,5.26-.44,1.27-1.66,1.57-2.91,1.75-2.08.3-4.19.27-6.24.74-3.04.7-3.75,1.46-3.69,4.63.14,7.49.34,14.98.59,22.47.34,10.41.76,20.82,1.11,31.23.15,4.63.19,4.69,4.87,4.8,4.75.12,9.42-.2,13.94-1.84,4.75-1.73,8.51-4.66,11.24-8.89,1.62-2.52,3.19-5.08,4.27-7.88,1.63-4.24,5.1-3.89,7.98-2.94,1.35.44,1.65,1.7,1.47,2.97-.28,2-.66,3.99-1.05,5.97-1.17,5.87-2.37,11.74-3.56,17.6-.13.66-.28,1.32-.48,1.96-.39,1.26-1.2,2.05-2.58,2.13-.97.06-1.94.14-2.92.15-8.92.11-17.84-.13-26.76.17-1.72.06-3.44,0-5.16,0,0,.08,0,.16,0,.24Z"/><path d="M692.39,103.98c1.5.19,2.9.43,4.32.53,3.11.22,4.06-.37,4.94-3.34,1.4-4.73,2.71-9.49,4.02-14.25,3.41-12.33,6.81-24.66,10.19-36.99,1.26-4.61.79-5.52-3.66-7.29-1.11-.44-2.26-.8-3.35-1.28-1.22-.54-1.83-1.5-1.74-2.86.03-.45.05-.9.13-1.34.65-3.67,2.04-4.6,5.6-3.67,13.97,3.66,27.75,7.94,41.6,12.02,3.1.91,3.63,2.03,2.76,5.19-.12.43-.25.86-.41,1.28-.74,1.87-1.46,2.35-3.41,2.15-1.04-.1-2.06-.36-3.09-.56-.44-.08-.87-.24-1.31-.29-4.34-.58-5.44-.35-6.75,4.04-4.99,16.7-10.06,33.37-15.07,50.06-1.33,4.41-1.06,4.92,3.12,6.92,1.08.52,2.18.98,3.28,1.46,1.5.64,2.14,1.76,2.03,3.38-.07.99-.28,1.93-.71,2.81-.98,1.99-2.25,2.57-4.4,1.95-13-3.75-26-7.52-39-11.29-1.38-.4-2.94-.79-3.08-2.51-.16-2.04.19-4.06,1.75-5.59.63-.61,1.5-.6,2.26-.54Z"/><path d="M204.55,106.74c1.16-.2,2.71-.47,4.26-.75,2.62-.48,3.72.18,4.51,2.75.13.43.27.86.35,1.3.44,2.51-.18,3.62-2.67,4.35-5.88,1.74-11.79,3.36-17.67,5.11-6.81,2.03-13.58,4.15-20.37,6.23-.57.18-1.14.37-1.72.49-.43.09-.91.21-1.32.11-2.33-.53-2.8-2.48-3.23-4.4-.4-1.83.05-2.94,1.61-3.78,1.18-.63,2.47-1.06,3.68-1.65,2.99-1.44,3.59-2.72,2.6-5.94-5.26-17.08-10.55-34.15-15.84-51.22-.18-.57-.42-1.12-.65-1.67-.7-1.65-1.95-2.46-3.73-2.22-1.78.24-3.53.62-5.3.93-2.57.45-3.54-.11-4.42-2.56-.08-.21-.15-.42-.21-.64-.93-3.16-.28-4.42,2.86-5.38,4.51-1.37,9.02-2.71,13.54-4.04,8.96-2.65,17.93-5.3,26.89-7.94.65-.19,1.29-.4,1.95-.54.74-.16,1.52-.26,2.23,0,2.19.78,2.14,2.86,2.53,4.64.32,1.47-.1,2.69-1.57,3.34-1.09.48-2.21.9-3.32,1.36-.83.34-1.66.67-2.47,1.07-2.46,1.21-2.99,2.16-2.26,4.86,1.83,6.78,3.76,13.54,5.69,20.3,2.93,10.28,5.89,20.56,8.85,30.84.23.79.46,1.58.76,2.35.87,2.21,1.78,2.8,4.47,2.72Z"/><path d="M719.68,472.51c.75-.09,2.09-.23,3.43-.41,2.59-.35,3.65.3,4.33,2.72,1.14,4.06.42,5.2-3.75,6.06-12.75,2.63-25.49,5.29-38.24,7.94-.15.03-.29.07-.44.1-4.17.82-5.63-.29-6.01-4.57-.16-1.77.46-2.85,2.16-3.5,1.26-.48,2.57-.8,3.84-1.25,3.32-1.17,3.9-2.06,3.26-5.53-1.21-6.62-2.48-13.24-3.77-19.85-2.15-11.01-4.35-22.02-6.53-33.03-.1-.51-.21-1.03-.37-1.52-.69-2.19-1.6-2.92-3.91-2.95-1.19-.01-2.39.21-3.58.26-3.4.15-5.87-3.86-4.28-6.93.53-1.02,1.44-1.44,2.53-1.65,4.26-.85,8.51-1.71,12.76-2.59,8.28-1.71,16.58-3.32,24.82-5.21,4.63-1.06,5.66,1.39,5.8,4.49.1,2.16-.37,2.96-2.41,3.74-1.05.4-2.14.69-3.19,1.06-3.52,1.25-3.97,1.92-3.3,5.66.65,3.68,1.41,7.35,2.19,11.01,2.96,13.82,5.96,27.64,8.94,41.46.06.29.12.59.2.88.87,3.17,1.62,3.72,5.52,3.62Z"/><path d="M394.49,500.99c-.3-.72-.93-1.17-1.72-1.31-1.7-.29-2.71-1.43-3.61-2.79-5.15-7.82-10.34-15.6-15.49-23.42-1.1-1.67-2.07-3.44-3.23-5.37,3.65-1.2,6.82-2.66,9.72-4.73,9.16-6.53,11.15-22.09,2.35-30.55-2.46-2.37-5.25-4.2-8.39-5.51-5.3-2.21-10.87-3.34-16.53-3.98-10.94-1.24-21.9-2.37-32.84-3.55-2.16-.23-4.32-.52-6.48-.69-2.02-.16-2.65.3-3.46,2.14-.28.63-.42,1.28-.51,1.95-.31,2.47.75,4.01,3.17,4.66.79.21,1.6.38,2.38.63,2.64.85,3.27,1.67,3.15,4.4-.09,2.02-.3,4.03-.53,6.04-1.64,14.51-3.29,29.02-4.96,43.53-.22,1.93-.49,3.87-.88,5.77-.61,2.96-1.41,3.59-4.41,3.74-1.27.06-2.55.05-3.82.08-.77.02-1.48.24-2.04.81-1.16,1.17-1.61,5.05-.74,6.41.52.81,1.37,1.17,2.25,1.36.95.21,1.92.34,2.89.45,12.35,1.42,24.71,2.79,37.1,3.91,3.05.28,4.11-.53,4.56-3.53.06-.37.13-.74.15-1.11.11-2.23-.67-3.33-2.85-3.93-1.23-.34-2.49-.53-3.71-.88-2.26-.66-2.98-1.58-2.86-3.9.18-3.59.38-7.19.76-10.76.2-1.89.13-3.85.81-5.87.82.68,1.2,1.5,1.66,2.22,5.58,8.7,11.19,17.38,16.69,26.12,1.36,2.15,3.04,3.44,5.62,3.45.45,0,.9.08,1.34.11,6.58.43,13.16.85,19.74,1.27.97.06,1.94.07,2.91-.17.69-.17,1.32-.48,1.6-1.12.84-1.92,1.03-3.9.21-5.88ZM362.41,454.79c-1.21,3.82-3.77,6.2-7.75,6.97-2.43.47-4.89.74-7.88.64-.9-.08-2.69.54-3.61-.38-.97-.96-.09-2.68.04-4.06.76-7.98,1.56-15.95,2.36-23.92.07-.67.22-1.33.35-1.99.37-1.79,1.57-2.7,3.3-2.85,2.32-.2,4.63-.09,6.89.64,4.09,1.33,6.56,4.14,7.35,8.29,1.07,5.61.69,11.19-1.04,16.65Z"/><path d="M674.03,485.55c-.06-.22-.08-.44-.15-.66-.4-1.26-1.24-2.15-2.58-2.13-2.01.04-3.35-1.03-4.68-2.3-7.49-7.13-14.99-14.25-22.49-21.36-.6-.57-1.21-1.11-2.02-1.85,2.13-1.48,4.02-2.69,5.71-4.18,5.23-4.61,7.82-10.32,7.22-17.34-.68-7.97-4.44-13.84-11.9-17.12-2.27-1-4.63-1.71-7.08-2.09-6.43-.99-12.85-.56-19.26.24-8.99,1.13-17.98,2.28-26.97,3.42-3.34.42-6.69.8-10.03,1.28-2,.29-2.55.99-2.62,2.96-.01.37,0,.75,0,1.12.1,3.48,1.17,4.53,4.63,4.54,4.85.01,5.95.93,6.52,5.71.69,5.72,1.28,11.46,1.94,17.19.82,7.14,1.65,14.28,2.49,21.42.59,5.06,1.18,10.12,1.45,15.21.12,2.3-.44,3.1-2.62,3.8-1.35.43-2.75.71-4.1,1.16-1.96.64-2.66,1.66-2.55,3.69.05.89.2,1.79.44,2.65.35,1.28,1.23,2.04,2.59,2.1.67.03,1.35.06,2.02-.02,2.23-.25,4.46-.53,6.69-.81,8.92-1.11,17.84-2.21,26.75-3.32,2.08-.26,4.16-.53,6.22-.9,1.25-.22,2.29-.86,2.46-2.26.17-1.42.11-2.84-.38-4.21-.49-1.36-1.43-2.07-2.87-2.08-1.05-.01-2.1.06-3.15.05-3.57-.03-4.42-.73-5.22-4.22-.05-.22-.08-.44-.11-.66-.57-4.15-1.16-8.3-1.7-12.46-.1-.77-.01-1.57-.01-2.5,1.52.72,2.23,2.11,3.28,3.12,6.66,6.38,13.39,12.68,19.85,19.25,2.7,2.75,5.35,3.74,9.18,2.92,6.36-1.36,12.84-2.19,19.26-3.28,4.07-.69,4.89-2.05,3.8-6.07ZM630.89,448.21c-.6,2.48-1.99,4.32-4.16,5.59-3.54,2.07-7.44,3.05-11.45,3.68-1.14.18-1.55-.22-1.7-1.39-1.12-8.6-2.37-17.18-3.47-25.78-.62-4.86.22-5.9,5.05-6.87,6.63-1.34,11.43,1.29,13.89,7.61,1.51,3.87,2.33,7.87,2.25,12.55-.08,1.2,0,2.92-.41,4.62Z"/><path d="M563.94,81.65c-.28-1.66-1.64-2.17-3.08-2.54-2.04-.52-3.37-1.8-4.13-3.77-1.09-2.86-2.35-5.67-3.37-8.56-5.68-16-11.47-31.96-17.58-47.81-1.94-5.03-3.9-10.04-5.93-15.03-1.01-2.49-2.96-3.53-5.67-3.61-2.59-.07-4.33.7-5.58,3.14-9.83,19.1-19.94,38.04-29.54,57.26-1.27,2.54-2.49,5.11-3.82,7.63-1.47,2.79-3.57,4.74-6.91,5.09-1.56.16-2.14.9-2.45,2.49-.08.44-.12.89-.2,1.33-.45,2.72.67,4.75,4,4.81,5.32.1,10.63.47,15.95.68,2.47.1,4.95.1,7.42.14,1.03.02,2.03-.19,2.49-1.18.85-1.83.81-3.79.47-5.73-.12-.68-.73-1.08-1.38-1.37-.64-.28-1.31-.3-1.97-.38-2-.25-3.99-.54-5.82-1.51.88-3.98,2.82-7.45,4.59-10.99.38-.77.98-.75,1.69-.71,4.56.28,9.13.53,13.69.79,2.24.13,4.49.27,6.73.41,1,.06,1.98.23,2.36,1.35,1.29,3.81,3.22,7.43,3.42,11.88-2.16,0-4.1-.03-6.03,0-3.19.07-4.06.93-4.29,4.16-.03.37-.06.75-.05,1.12.08,2.17.93,3.14,3.07,3.44,1.19.17,2.38.28,3.58.38,9.63.8,19.26,1.65,28.87,2.69,1.94.21,3.88.39,5.82.55.93.08,1.87-.03,2.45-.82,1.16-1.58,1.5-3.42,1.18-5.33ZM501.59,53.4c4.29-8.85,8.7-17.29,13.72-25.88,4.25,9.05,7.66,18.05,11.21,27.41-8.38-.52-16.51-1.02-24.92-1.54Z"/><path d="M680.99,32.73c-6.08-5.56-13.2-9.28-21.1-11.5-6.13-1.72-12.43-2.68-18.68-3.84-8.98-1.66-17.96-3.28-26.96-4.84-3.33-.58-4.37.24-4.97,3.5-.07.37-.11.74-.13,1.12-.1,1.99.46,2.91,2.31,3.62,1.05.4,2.14.67,3.2,1.05,3.91,1.39,4.47,2.43,3.76,6.57-1.76,10.25-3.48,20.51-5.22,30.77-1.22,7.16-2.42,14.31-3.67,21.47-.54,3.07-1.73,4.01-4.91,4.06-1.12.02-2.25-.03-3.37.01-1.45.05-2.72.53-3.07,2.1-.41,1.84-1.4,3.76.24,5.53.41.45.94.73,1.54.87.58.13,1.17.28,1.76.38,12.23,2.2,24.46,4.34,36.67,6.63,7.55,1.42,15.05,1.61,22.51-.31,13.25-3.42,23.1-11.04,28.58-23.79,2.12-4.94,2.99-10.18,3.15-15.54.41-11.06-3.45-20.36-11.63-27.84ZM665.14,69.09c-1.13,4.43-2.8,8.68-4.89,12.76-4.09,7.98-10.77,11.73-19.6,11.93-2.2-.03-4.34-.29-6.43-.97-2.84-.93-3.66-1.99-3.47-4.93.27-4.12,1.18-8.14,1.96-12.18,2.76-14.48,5.56-28.95,8.36-43.41.26-1.32.52-2.65.93-3.93.85-2.64,2.52-3.77,5.29-3.46,11.5,1.3,17.93,8.05,19.92,18.47,1.68,8.79.1,17.28-2.06,25.73Z"/><path d="M379.48,39.34c-1.43-8.13-4.85-15.21-10.83-20.98-5.16-4.98-11.13-8.63-18.02-10.59-15.28-4.35-29.95-2.42-43.99,4.75-4.72,2.41-8.68,5.85-12.13,9.87-8.4,9.79-11.26,21.09-9.14,33.72,2.24,13.39,9.61,23.18,21.26,29.85,7.38,4.23,15.44,5.97,24.65,5.94,1.9.06,4.51-.12,7.11-.54,2.36-.39,4.73-.8,7.05-1.37,10.36-2.55,19.05-7.78,25.75-16.19,8.13-10.2,10.54-21.75,8.32-34.45ZM353.11,71.62c-2.32,6.64-6.55,11.42-13.57,13.12-7,1.69-13.2.11-18.28-5.17-3.17-3.3-5.2-7.29-6.77-11.53-2.49-6.71-3.7-13.7-4.53-20.77-.45-3.88-.64-7.76-.42-11.66.22-3.98,1.04-7.84,2.56-11.55,2.61-6.36,7.45-10.03,14.02-11.36,8.25-1.67,15.03.88,20.19,7.63,3.58,4.69,5.47,10.1,6.79,15.74,1.47,6.29,2.06,12.7,2.18,19.27-.1,5.42-.31,10.96-2.16,16.27Z"/><path d="M574.57,461.83c-2.02-15.3-9.94-26.48-23.8-33.15-11.86-5.71-24.31-5.99-36.81-2.36-18.73,5.45-30.79,22.01-30.81,45.7.22,12.02,6.75,24.25,20.59,32.18,7.13,4.09,14.96,6.09,23.17,6.31,10.13.28,19.58-2.34,28.34-7.34,7.67-4.38,13.17-10.75,16.62-18.89,3.07-7.23,3.73-14.74,2.7-22.47ZM550.62,477.26c-.2,4.73-.88,9.39-2.64,13.83-.72,1.82-1.57,3.56-2.67,5.17-3.12,4.57-7.49,7.02-12.94,7.53-9.01.83-15.28-2.65-19.48-10.67-2.58-4.92-3.7-10.25-4.43-15.68-.6-4.46-.78-8.95-.9-13.4.2-6.19.32-12.34,2.16-18.28.96-3.09,2.23-6.03,4.2-8.64,5.91-7.82,17.55-9.03,24.93-2.6,2.87,2.51,4.94,5.59,6.51,9.04,2.32,5.09,3.6,10.47,4.29,15.98.73,5.87,1.24,11.78.98,17.71Z"/><path d="M816.55,418.13c-1.71-7.92-5.12-15.04-10.7-20.93-8.12-8.57-18.4-12.55-30.02-13.45-4.62-.36-9.11.48-13.59,1.37-9.48,1.89-17.94,5.98-24.76,12.83-10.7,10.77-14.44,23.86-11.68,38.75,1.59,8.6,5.22,16.21,11.72,22.27,8.46,7.88,18.62,11.41,30.54,11.66,10.15-.28,20.1-2.99,29.14-8.59,13.1-8.11,23.62-24.07,19.35-43.9ZM791.8,454.22c-3.96,6.42-10.03,8.91-17.33,8.85-4.74-.04-8.69-2-12.06-5.24-2.51-2.41-4.47-5.23-6.1-8.29-4.81-9.02-8.98-25.66-9.02-37.44,0-1.99.51-5.46,1.61-8.83,2.33-7.11,7.58-10.75,14.68-11.85,4.9-.76,9.27.74,13.22,3.78,3.27,2.52,5.78,5.62,7.87,9.12,3.84,6.43,6.08,13.47,8.03,20.63,1.28,4.71,2.4,9.48,2.46,14.35.07,5.18-.54,10.36-3.35,14.91Z"/><path d="M303.76,449.16c-.96-12.3-6.05-22.61-15.92-29.99-13.25-9.9-28.12-13.35-44.34-8.89-26.43,7.28-34.52,31.6-30.97,50.52,2.24,11.93,9.38,20.86,19.69,26.91,11.55,6.77,24.22,9.26,37.42,6.66,20.74-4.09,34-19.31,34.3-42.16-.05-.8-.09-1.92-.18-3.04ZM279.96,442.76c.02,9.71-1.62,19.25-4.76,28.54-1.43,4.23-3.59,8.08-6.55,11.41-4.96,5.58-13.39,7.35-20.86,4.38-5.46-2.17-9.18-5.99-10.91-11.71-1.57-5.17-1.86-10.44-1.49-15.78.64-9.23,2.52-18.21,5.79-26.88,1.6-4.24,3.7-8.18,6.83-11.5,2.91-3.08,6.32-5.32,10.64-5.7,7.19-.62,13.13,1.61,17.12,7.93,2.45,3.88,3.64,8.17,4.08,12.7.21,2.16.25,4.34.11,6.62Z"/></symbol>
+</defs></svg>
+<div class="grain" id="grain" aria-hidden="true"></div>
+<div class="curtain" id="curtain" aria-hidden="true">
+  <span id="cTop">[ OPENING ENTRY ]</span>
+  <div><div class="big" id="cBig">QUERCIA</div><div class="bar-l" style="margin-top:20px"></div></div>
+  <span id="cBot">LND-001 · V. 002</span>
+</div>
+<div class="cur" id="cur" aria-hidden="true"></div>
+
+<script>
+const LOGOS={quercia:"0 0 807.61 163.22",isola:"0 0 899.7 510.54"};
+function setLogo(svg,use,key){if(key){svg.setAttribute("viewBox",LOGOS[key]);use.setAttribute("href","#logo-"+key);svg.hidden=false}else svg.hidden=true}
+const PROJECTS=[
+  {id:"quercia",logo:"quercia",code:"LND-001",name:"Quercia",type:"Live music",year:"20—",role:"Founder, identity, content",
+   text:["QUERCIA IS A MUSIC EVENTS BRAND BORN ON INSTAGRAM. <span class='aside'>(WHAT IS IT?)</span>","I BUILD THE IDENTITY, THE CONTENT AND THE PROMO FOR EVERY NIGHT. <span class='aside'>(ADD THE STORY HERE)</span>"]},
+  {id:"mortorio",logo:"isola",code:"LND-002",name:"Isola di Mortorio",type:"Live music / Fashion",year:"20—",role:"[ Add role ]",
+   text:["[ ONE OR TWO LINES ON ISOLA DI MORTORIO. ] <span class='aside'>(WHAT IS IT?)</span>","[ WHAT YOU DID AND WHY IT MATTERS. ] <span class='aside'>(HOW DID IT GO?)</span>"]},
+  {id:"santi40",code:"LND-003",name:"Santi 40",type:"Hospitality",year:"20—",role:"[ Add role ]",
+   text:["[ ONE OR TWO LINES ON SANTI 40. ] <span class='aside'>(WHAT IS IT?)</span>","[ WHAT YOU DID AND WHY IT MATTERS. ] <span class='aside'>(HOW DID IT GO?)</span>"]},
+  {id:"other",code:"LND-004",name:"Other stuff",type:"Freelance, misc.",year:"2019—",role:"Design, video, AI",
+   text:["CLIENT WORK, MENUS, COVERS, EDITS AND EXPERIMENTS THAT DON’T NEED THEIR OWN PAGE. <span class='aside'>(THE DRAWER)</span>","[ LIST THE PIECES HERE. ]"]}
+];
+
+/* ---------- generative placeholder visuals, one per project ---------- */
+const n2=(x,y,t)=>Math.sin(x*1.7+t)*.5+Math.sin(y*2.3-t*.7)*.35+Math.sin((x+y)*3.1+t*.4)*.15;
+const ART={
+  quercia(c,w,h,t,fg){ // oak tree rings
+    c.strokeStyle=fg;c.lineWidth=1;const cx=w*.5,cy=h*.52;
+    for(let r=6;r<Math.max(w,h)*.7;r+=7){c.beginPath();
+      for(let a=0;a<=Math.PI*2+.01;a+=.06){const k=r+n2(Math.cos(a)*2,Math.sin(a)*2,t+r*.01)*r*.08;
+        const x=cx+Math.cos(a)*k*1.15,y=cy+Math.sin(a)*k;a?c.lineTo(x,y):c.moveTo(x,y)}c.stroke()}
+  },
+  mortorio(c,w,h,t,fg){ // island contour lines
+    c.strokeStyle=fg;c.lineWidth=1;const cx=w*.5,cy=h*.5;
+    for(let i=0;i<14;i++){const s=1-i*.065;c.beginPath();
+      for(let a=0;a<=Math.PI*2+.01;a+=.04){const b=1+.28*Math.sin(a*2+1)+.18*Math.sin(a*3-.5)+.06*n2(Math.cos(a)*3,Math.sin(a)*3,t*.6+i*.2);
+        const x=cx+Math.cos(a)*w*.36*s*b,y=cy+Math.sin(a)*h*.3*s*b*.9;a?c.lineTo(x,y):c.moveTo(x,y)}c.closePath();c.stroke()}
+    c.fillStyle=fg;c.font="500 10px 'IBM Plex Mono',monospace";c.fillText("41°04′N 9°36′E",10,16);
+  },
+  santi40(c,w,h,t,fg){ // 40-cell grid
+    const cols=8,rows=5,g=6,cw=(w-g*(cols+1))/cols,ch=(h-g*(rows+1))/rows;c.strokeStyle=fg;c.fillStyle=fg;c.lineWidth=1;
+    for(let i=0;i<40;i++){const x=g+(i%cols)*(cw+g),y=g+Math.floor(i/cols)*(ch+g);
+      c.strokeRect(x+.5,y+.5,cw,ch);const on=Math.sin(i*12.9898+Math.floor(t*1.5)*.7)>.55;
+      if(on)c.fillRect(x+.5,y+.5,cw,ch)}
+  },
+  other(c,w,h,t,fg){ // drifting dot field
+    c.fillStyle=fg;for(let i=0;i<220;i++){const sx=(Math.sin(i*91.7)*.5+.5),sy=(Math.sin(i*47.3)*.5+.5);
+      const x=((sx*w+t*12*(.3+sx))%w),y=sy*h+Math.sin(t+i)*4,r=1+(i%5===0?2:0);c.beginPath();c.arc(x,y,r,0,7);c.fill()}
+  }
+};
+function sizeCanvas(cv){const r=cv.getBoundingClientRect(),d=Math.min(devicePixelRatio||1,2);cv.width=Math.max(1,r.width*d);cv.height=Math.max(1,r.height*d);const c=cv.getContext("2d");c.setTransform(d,0,0,d,0,0);return[c,r.width,r.height]}
+const reduce=matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+/* ---------- build list ---------- */
+const list=document.getElementById("projList");
+PROJECTS.forEach(p=>{const li=document.createElement("li");
+  li.innerHTML=`<a class="row" href="#${p.id}" data-route="${p.id}" data-id="${p.id}"><span class="code">${p.code}</span><span class="name">${p.name}</span><span class="type">${p.type}</span><span class="yr">${p.year}</span><span class="arr" aria-hidden="true">→</span></a>`;
+  list.appendChild(li)});
+
+/* ---------- word reveal on the intro ---------- */
+function splitWords(el,base=0){let i=0;
+  const walk=node=>{[...node.childNodes].forEach(ch=>{
+    if(ch.nodeType===3){const frag=document.createDocumentFragment();
+      ch.textContent.split(/(\s+)/).forEach(tok=>{if(!tok)return;if(/^\s+$/.test(tok)){frag.append(tok);return}
+        const w=document.createElement("span");w.className="w";const s=document.createElement("span");s.textContent=tok;
+        s.style.animationDelay=(base+i++*0.028)+"s";w.append(s);frag.append(w)});ch.replaceWith(frag)}
+    else if(ch.nodeType===1&&!ch.classList.contains("aside"))walk(ch)})};walk(el)}
+/* ---------- the letter rises out of the blue as you scroll ---------- */
+let sp=-1;function sheetMotion(){}
+
+/* grain texture, generated once */
+(()=>{const s=220,c=document.createElement("canvas");c.width=c.height=s;const x=c.getContext("2d"),d=x.createImageData(s,s);
+  for(let i=0;i<d.data.length;i+=4){const v=Math.random()*255|0;d.data[i]=d.data[i+1]=d.data[i+2]=v;d.data[i+3]=255}
+  x.putImageData(d,0,0);document.getElementById("grain").style.backgroundImage=`url(${c.toDataURL()})`})();
+
+/* ---------- clock + boot counter ---------- */
+function tick(){const d=new Date(new Date().toLocaleString("en-US",{timeZone:"Europe/Rome"}));const p=n=>String(n).padStart(2,"0");
+  document.getElementById("clock").textContent=`${p(d.getHours())}:${p(d.getMinutes())}`;
+  const ds=`${p(d.getDate())}/${p(d.getMonth()+1)}/${String(d.getFullYear()).slice(2)}`;
+  document.getElementById("date").textContent=ds;const sd=document.getElementById("sheetDate");if(sd)sd.textContent=ds.replace(/\//g,".")}
+tick();setInterval(tick,10000);
+(()=>{const el=document.getElementById("bootN");if(!el)return;const t0=performance.now();
+  const f=now=>{const k=Math.min(1,(now-t0)/1000);el.textContent=String(Math.round(k*k*(3-2*k)*100)).padStart(3,"0");if(k<1)requestAnimationFrame(f)};requestAnimationFrame(f);
+  setTimeout(()=>document.querySelector(".boot")?.remove(),2200)})();
+
+/* ---------- cursor, coords, preview ---------- */
+const cur=document.getElementById("cur"),coords=document.getElementById("coords"),pv=document.getElementById("preview"),pvCv=document.getElementById("prevCv");
+let mx=innerWidth/2,my=innerHeight/2,cx=mx,cy=my,px=mx,py=my,hoverId=null;
+addEventListener("pointermove",e=>{mx=e.clientX;my=e.clientY;
+  coords.textContent=`X ${String(Math.round(mx)).padStart(4,"0")} · Y ${String(Math.round(my)).padStart(4,"0")}`});
+document.addEventListener("pointerover",e=>{const a=e.target.closest("a,button");cur.classList.toggle("big",!!a);
+  const row=e.target.closest(".row");if(row){hoverId=row.dataset.id;const p=PROJECTS.find(x=>x.id===hoverId);
+    document.getElementById("prevL").textContent=p.code;setLogo(document.getElementById("pvLogo"),document.getElementById("pvUse"),p.logo);pv.classList.add("on")}else{hoverId=null;pv.classList.remove("on")}});
+let pvCtx=null;
+function loop(t){t/=1000;sheetMotion();
+  cx+=(mx-cx)*.35;cy+=(my-cy)*.35;cur.style.transform=`translate(${cx}px,${cy}px)`;
+  px+=(mx-px)*.12;py+=(my-py)*.12;
+  const W=300,H=225;let x=px+28,y=py-H/2;if(x+W>innerWidth-16)x=px-W-28;y=Math.max(60,Math.min(innerHeight-H-60,y));
+  pv.style.transform=`translate(${x}px,${y}px) ${pv.classList.contains("on")?"scale(1)":"scale(.85)"} rotate(${(mx-px)*.03}deg)`;
+  if(hoverId){if(!pvCtx)pvCtx=sizeCanvas(pvCv);const[c,w,h]=pvCtx;c.clearRect(0,0,w,h);if(!PROJECTS.find(x=>x.id===hoverId).logo)ART[hoverId](c,w,h-18,reduce?0:t,"#262626")}
+  if(heroId&&heroCtx){const[c,w,h]=heroCtx;c.clearRect(0,0,w,h);ART[heroId](c,w,h,reduce?0:t,"#F1F0EA")}
+  requestAnimationFrame(loop)}
+let heroId=null,heroCtx=null;requestAnimationFrame(loop);
+addEventListener("resize",()=>{pvCtx=null;if(heroId)heroCtx=sizeCanvas(document.getElementById("heroCv"))});
+
+/* ---------- routing with curtain transition ---------- */
+const vIndex=document.getElementById("v-index"),vProj=document.getElementById("v-project"),curtain=document.getElementById("curtain");
+function render(id){
+  const p=PROJECTS.find(x=>x.id===id);
+  if(!p){vProj.hidden=true;vIndex.hidden=false;document.body.classList.remove("paper");heroId=null;sp=-1;
+    document.getElementById("pageTag").textContent="PAGE 00 / INDEX";return}
+  const i=PROJECTS.indexOf(p),nx=PROJECTS[(i+1)%PROJECTS.length];
+  document.getElementById("pCode").textContent=`${p.code} · ${String(i+1).padStart(2,"0")}/${String(PROJECTS.length).padStart(2,"0")}`;
+  const pt=document.getElementById("pTitle");pt.textContent=p.name;pt.dataset.ghost=p.name;setLogo(document.getElementById("pLogo"),document.getElementById("pUse"),p.logo);document.getElementById("pLogo").setAttribute("aria-label",p.name+" logo");
+  document.getElementById("pGrid").innerHTML=[["Type",p.type],["Role",p.role],["Year",p.year],["Entry",p.code]].map(([a,b])=>`<div><dt>${a}</dt><dd>${b}</dd></div>`).join("");
+  document.getElementById("pText").innerHTML=p.text.map(t=>`<p>${t}</p>`).join("");
+  document.getElementById("heroCapL").textContent=`FIG. 01 — ${p.code}`;
+  const nxt=document.getElementById("pNext");nxt.href="#"+nx.id;nxt.dataset.route=nx.id;document.getElementById("pNextName").textContent=nx.name;
+  vIndex.hidden=true;vProj.hidden=false;document.body.classList.add("paper");
+  document.getElementById("pageTag").textContent=`PAGE ${String(i+1).padStart(2,"0")} / ${p.name.toUpperCase()}`;
+  heroId=p.id;requestAnimationFrame(()=>heroCtx=sizeCanvas(document.getElementById("heroCv")));
+  splitWords(document.getElementById("pTitle"),.1);
+}
+let busy=false;
+function go(id,push=true){
+  if(busy)return;const p=PROJECTS.find(x=>x.id===id);
+  if(reduce){render(id);scrollTo(0,0);if(push)history.pushState(null,"","#"+id);return}
+  busy=true;document.getElementById("cBig").textContent=p?p.name:"Index";
+  document.getElementById("cTop").textContent=p?"[ OPENING ENTRY ]":"[ RETURNING TO INDEX ]";
+  document.getElementById("cBot").textContent=(p?p.code:"LND-000")+" · V. 002";
+  curtain.className="curtain";void curtain.offsetWidth;curtain.classList.add("in");
+  setTimeout(()=>{render(id);scrollTo(0,0);if(push)history.pushState(null,"","#"+id);
+    curtain.classList.remove("in");curtain.classList.add("out");
+    setTimeout(()=>{curtain.className="curtain";busy=false},750)},900);
+}
+document.addEventListener("click",e=>{const a=e.target.closest("[data-route]");if(!a)return;e.preventDefault();go(a.dataset.route)});
+/* contacts window */
+const ctBtn=document.getElementById("ctBtn"),ctPanel=document.getElementById("ctPanel");
+let ctTimer=0;const ctOpen=()=>!ctPanel.hidden&&!ctPanel.classList.contains("closing");
+function ctToggle(open){clearTimeout(ctTimer);ctBtn.setAttribute("aria-expanded",open);
+  if(open){ctPanel.classList.remove("closing");ctPanel.hidden=false;return}
+  if(ctPanel.hidden)return;ctPanel.classList.add("closing");
+  ctTimer=setTimeout(()=>{ctPanel.hidden=true;ctPanel.classList.remove("closing")},reduce?0:400)}
+ctBtn.addEventListener("click",e=>{e.stopPropagation();ctToggle(!ctOpen())});
+document.addEventListener("click",e=>{if(ctOpen()&&!ctPanel.contains(e.target)&&e.target!==ctBtn)ctToggle(false)});
+addEventListener("keydown",e=>{if(e.key==="Escape")ctToggle(false)});
+document.getElementById("ctCopy").addEventListener("click",e=>{const b=e.currentTarget;
+  const sel=()=>{const r=document.createRange();r.selectNodeContents(document.getElementById("ctMail"));const s=getSelection();s.removeAllRanges();s.addRange(r)};
+  try{navigator.clipboard.writeText("lucanobili27@gmail.com").then(()=>{b.textContent="COPIED";setTimeout(()=>b.textContent="COPY",1600)},sel)}catch(_){sel()}});
+addEventListener("popstate",()=>render(location.hash.slice(1)||"index"));
+render(location.hash.slice(1)||"index");
+</script>
+
+</body></html>
