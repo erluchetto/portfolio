@@ -243,7 +243,7 @@ main{padding-block:96px 120px;max-width:1600px;margin:0 auto}
 .lb-stage{display:grid;place-items:center;height:100%;min-height:0;padding:0 16px}
 .lb-stage img{max-width:100%;max-height:calc(100svh - 110px);width:auto;height:auto;opacity:0;transform:scale(.96);transition:opacity .35s var(--ease-out),transform .5s var(--ease-out);cursor:zoom-out}
 .lb-stage img.on{opacity:1;transform:none}
-@media (max-width:720px){.lb{grid-template-columns:1fr 1fr;grid-template-rows:auto 1fr auto}.lb-stage{grid-column:1/-1;grid-row:2;padding:0}.lb-nav.prev{grid-row:3;justify-self:start}.lb-nav.next{grid-row:3;justify-self:end}}
+@media (max-width:720px){.lb{grid-template-columns:1fr 1fr;grid-template-rows:auto 1fr auto}.lb-stage{grid-column:1/-1;grid-row:2;padding:0}.lb-nav.lb-prev{grid-row:3;justify-self:start}.lb-nav.lb-next{grid-row:3;justify-self:end}}
 .cat-desc{margin:0;max-width:90ch;font:500 10px/1.5 var(--mono);letter-spacing:.06em;text-transform:uppercase;opacity:.75;filter:url(#bleedSoft)}
 .cat-desc b{font-weight:700}
 .stages .car-item{flex:0 0 auto}
@@ -449,7 +449,7 @@ html:has(body.paper){background:var(--paper)}
   </section>
 </main>
 
-<div class="lb" id="lb" hidden role="dialog" aria-modal="true" aria-label="Image viewer"><div class="lb-top"><span id="lbN">01 / 01</span><button type="button" class="lb-btn" id="lbX" aria-label="Close">[ CLOSE ]</button></div><button type="button" class="lb-nav prev" id="lbP" aria-label="Previous image">←</button><div class="lb-stage"><img id="lbImg" alt="" draggable="false"></div><button type="button" class="lb-nav next" id="lbNx" aria-label="Next image">→</button></div>
+<div class="lb" id="lb" hidden role="dialog" aria-modal="true" aria-label="Image viewer"><div class="lb-top"><span id="lbN">01 / 01</span><button type="button" class="lb-btn" id="lbX" aria-label="Close">[ CLOSE ]</button></div><button type="button" class="lb-nav lb-prev" id="lbP" aria-label="Previous image">←</button><div class="lb-stage"><img id="lbImg" alt="" draggable="false"></div><button type="button" class="lb-nav lb-next" id="lbNx" aria-label="Next image">→</button></div>
 <div class="ct-panel" id="ctPanel" hidden>
   <div class="ct-row"><a href="mailto:lucanobili27@gmail.com"><span>EMAIL</span><span>↗</span></a><span class="ct-val"><span id="ctMail">lucanobili27@gmail.com</span><button type="button" id="ctCopy">COPY</button></span></div>
   <div class="ct-row"><a href="https://www.instagram.com/lukett0/" target="_blank" rel="noopener"><span>INSTAGRAM</span><span>↗</span></a></div>
