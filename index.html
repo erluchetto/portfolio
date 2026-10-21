@@ -344,7 +344,8 @@ html:has(body.paper){background:var(--paper)}
 .cur::before{left:50%;top:0;bottom:0;width:1px}
 .cur::after{top:50%;left:0;right:0;height:1px}
 .cur.big{width:56px;height:56px;margin:-28px 0 0 -28px}
-@media (hover:hover) and (pointer:fine){html,a,button{cursor:none}}
+/* desktop pointer: old-school pixel arrow (white, black outline), native cursor so it never lags */
+@media (hover:hover) and (pointer:fine){html,body,*{cursor:url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAmCAYAAADeB1slAAAAkklEQVR42s3USw7AIAgEUGi8/5WnG01M0xSkgmPizt9jVBER9J7SLklu8wYpkjoBAAGwXVKaQYqkXrBbck6wS3Je8FfCI4hK+ASrEl6BV8IvsCTpghadqKomikMwTtrr+zrk6EvWUavnCaca61xTx7haQfu4HUr10MwMvLdiNYvSDDRjg5IMwh+oJwt+gbVmuuAGNxpiC6eT95cAAAAASUVORK5CYII=") 0 0,default!important}.cur{display:none}}
 @media not ((hover:hover) and (pointer:fine)){.cur,.preview{display:none}}
 
 /* responsive */
