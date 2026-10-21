@@ -353,6 +353,15 @@ html:has(body.paper){background:var(--paper)}
   .intro .aside,.p-text .aside{white-space:normal}
 
 }
+/* phones/tablets: the SVG ink-bleed filter and the blended grain are too heavy for mobile Safari.
+   Swap them for cheap look-alikes: a soft text halo instead of the filter, an unblended grain layer. */
+@media (hover:none) and (pointer:coarse){
+  *,*::before,*::after{filter:none!important}
+  body{text-shadow:0 0 .5px color-mix(in srgb,currentColor 60%,transparent),0 0 3px color-mix(in srgb,currentColor 22%,transparent)}
+  .p-logo,.pv-logo{filter:drop-shadow(0 0 1.5px rgba(38,38,38,.28))!important}
+  .grain{inset:-12%;mix-blend-mode:normal;opacity:.06;will-change:transform}
+  video,img{text-shadow:none}
+}
 /* "Reduce motion" (iPhone/Mac accessibility setting): keep the site alive (grain, fades, videos),
    but swap the big sliding moves for gentle fades */
 @media (prefers-reduced-motion:reduce){
@@ -581,7 +590,10 @@ bioBox.addEventListener("keydown",e=>{const d={ArrowDown:1,ArrowUp:-1,PageDown:1
 
 /* grain texture, generated once */
 (()=>{const s=220,c=document.createElement("canvas");c.width=c.height=s;const x=c.getContext("2d"),d=x.createImageData(s,s);
-  for(let i=0;i<d.data.length;i+=4){const v=Math.random()*255|0;d.data[i]=d.data[i+1]=d.data[i+2]=v;d.data[i+3]=255}
+  const mob=matchMedia("(hover:none) and (pointer:coarse)").matches;
+  for(let i=0;i<d.data.length;i+=4){const v=Math.random()*255|0;
+    if(mob){const w=v>127?255:0;d.data[i]=d.data[i+1]=d.data[i+2]=w;d.data[i+3]=Math.abs(v-127.5)*2|0}
+    else{d.data[i]=d.data[i+1]=d.data[i+2]=v;d.data[i+3]=255}}
   x.putImageData(d,0,0);document.getElementById("grain").style.backgroundImage=`url(${c.toDataURL()})`})();
 
 /* ---------- clock + boot counter ---------- */
