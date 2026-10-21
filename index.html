@@ -353,9 +353,13 @@ html:has(body.paper){background:var(--paper)}
   .intro .aside,.p-text .aside{white-space:normal}
 
 }
+/* "Reduce motion" (iPhone/Mac accessibility setting): keep the site alive (grain, fades, videos),
+   but swap the big sliding moves for gentle fades */
 @media (prefers-reduced-motion:reduce){
-  *,*::before,*::after{animation:none!important;transition:none!important}
-  .boot{display:none}
+  .curtain.sweep{animation:sweepFade 1.2s ease both}
+  @keyframes sweepFade{0%{transform:translateY(0);opacity:0}40%,60%{transform:translateY(0);opacity:1}100%{transform:translateY(0);opacity:0}}
+  .w>span,.p-logo.rise{animation-name:fadeOnly}
+  @keyframes fadeOnly{from{opacity:0}}
 }
 </style>
 
@@ -513,7 +517,8 @@ const ART={
   }
 };
 function sizeCanvas(cv){const r=cv.getBoundingClientRect(),d=Math.min(devicePixelRatio||1,2);cv.width=Math.max(1,r.width*d);cv.height=Math.max(1,r.height*d);const c=cv.getContext("2d");c.setTransform(d,0,0,d,0,0);return[c,r.width,r.height]}
-const reduce=matchMedia("(prefers-reduced-motion: reduce)").matches;
+/* animations stay on for everyone; reduced-motion users get the gentler CSS variants above */
+const reduce=false;
 
 /* ---------- build list ---------- */
 const list=document.getElementById("projList");
