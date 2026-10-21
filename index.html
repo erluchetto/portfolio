@@ -127,8 +127,8 @@ main{padding-block:96px 120px;max-width:1600px;margin:0 auto}
 .letter .contacts{display:flex;flex-wrap:wrap;gap:6px 22px;margin-top:1.6em}
 
 /* film grain over everything, like the VAA site */
-.grain{position:fixed;inset:-100%;z-index:75;pointer-events:none;opacity:.07;mix-blend-mode:overlay;background-size:220px 220px;animation:grain 1s steps(6) infinite}
-@keyframes grain{0%{transform:translate(0,0)}17%{transform:translate(-4%,3%)}33%{transform:translate(3%,-5%)}50%{transform:translate(-6%,-2%)}67%{transform:translate(5%,4%)}83%{transform:translate(-2%,6%)}100%{transform:translate(0,0)}}
+.grain{position:fixed;inset:-64px;z-index:75;pointer-events:none;opacity:.07;mix-blend-mode:overlay;background-size:220px 220px;animation:grain 1s steps(6) infinite;will-change:transform;transform:translateZ(0)}
+@keyframes grain{0%{transform:translate3d(0,0,0)}17%{transform:translate3d(-37px,23px,0)}33%{transform:translate3d(29px,-41px,0)}50%{transform:translate3d(-53px,-17px,0)}67%{transform:translate3d(43px,31px,0)}83%{transform:translate3d(-19px,52px,0)}100%{transform:translate3d(0,0,0)}}
 
 /* pixel display face: single weight, keep it crisp */
 .row .name,.p-title,.p-text,.next span,.curtain .big,.boot .n,.foot{font-weight:700!important;letter-spacing:-.025em!important}
@@ -359,7 +359,6 @@ html:has(body.paper){background:var(--paper)}
   *,*::before,*::after{filter:none!important}
   body{text-shadow:0 0 .5px color-mix(in srgb,currentColor 60%,transparent),0 0 3px color-mix(in srgb,currentColor 22%,transparent)}
   .p-logo,.pv-logo{filter:drop-shadow(0 0 1.5px rgba(38,38,38,.28))!important}
-  .grain{inset:-12%;mix-blend-mode:normal;opacity:.06;will-change:transform}
   video,img{text-shadow:none}
 }
 /* "Reduce motion" (iPhone/Mac accessibility setting): keep the site alive (grain, fades, videos),
@@ -590,10 +589,7 @@ bioBox.addEventListener("keydown",e=>{const d={ArrowDown:1,ArrowUp:-1,PageDown:1
 
 /* grain texture, generated once */
 (()=>{const s=220,c=document.createElement("canvas");c.width=c.height=s;const x=c.getContext("2d"),d=x.createImageData(s,s);
-  const mob=matchMedia("(hover:none) and (pointer:coarse)").matches;
-  for(let i=0;i<d.data.length;i+=4){const v=Math.random()*255|0;
-    if(mob){const w=v>127?255:0;d.data[i]=d.data[i+1]=d.data[i+2]=w;d.data[i+3]=Math.abs(v-127.5)*2|0}
-    else{d.data[i]=d.data[i+1]=d.data[i+2]=v;d.data[i+3]=255}}
+  for(let i=0;i<d.data.length;i+=4){const v=Math.random()*255|0;d.data[i]=d.data[i+1]=d.data[i+2]=v;d.data[i+3]=255}
   x.putImageData(d,0,0);document.getElementById("grain").style.backgroundImage=`url(${c.toDataURL()})`})();
 
 /* ---------- clock + boot counter ---------- */
