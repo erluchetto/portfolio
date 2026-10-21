@@ -170,6 +170,11 @@ button:focus-visible{outline:2px solid var(--ink);outline-offset:2px}
 #beat{display:none}
 #titleblock h1{font-family:"Helvetica Neue",Helvetica,Arial,sans-serif;font-weight:700;letter-spacing:-.025em;text-transform:uppercase;font-size:clamp(28px,5vw,40px);line-height:.9}
 #bar>*{filter:url(#bleedSoft)}
+/* phones: the SVG bleed is too heavy for mobile Safari, use a light text halo instead (matches the main site) */
+@media (hover:none) and (pointer:coarse){
+  #titleblock,#bar>*{filter:none!important}
+  #titleblock,#bar{text-shadow:0 0 .5px color-mix(in srgb,currentColor 60%,transparent),0 0 3px color-mix(in srgb,currentColor 22%,transparent)}
+}
 </style>
 
 <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
