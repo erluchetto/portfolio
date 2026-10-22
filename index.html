@@ -123,8 +123,7 @@ main{padding-block:96px 120px;max-width:1600px;margin:0 auto}
 .letter .contacts{display:flex;flex-wrap:wrap;gap:6px 22px;margin-top:1.6em}
 
 /* film grain over everything, like the VAA site */
-.grain{position:fixed;inset:-64px;z-index:75;pointer-events:none;opacity:.07;mix-blend-mode:overlay;background-size:220px 220px;animation:grain 1s steps(6) infinite;will-change:transform;transform:translateZ(0)}
-@keyframes grain{0%{transform:translate3d(0,0,0)}17%{transform:translate3d(-37px,23px,0)}33%{transform:translate3d(29px,-41px,0)}50%{transform:translate3d(-53px,-17px,0)}67%{transform:translate3d(43px,31px,0)}83%{transform:translate3d(-19px,52px,0)}100%{transform:translate3d(0,0,0)}}
+.grain{position:fixed;inset:0;z-index:75;pointer-events:none;opacity:.05;mix-blend-mode:hard-light;background-repeat:repeat;background-size:400px 400px}
 
 /* pixel display face: single weight, keep it crisp */
 .row .name,.p-title,.p-text,.next span,.curtain .big,.boot .n,.foot{font-weight:700!important;letter-spacing:-.025em!important}
@@ -357,8 +356,7 @@ html:has(body.paper){background:var(--paper)}
   .intro .aside,.p-text .aside{white-space:normal}
 
 }
-/* phones/tablets: the SVG ink-bleed filter and the blended grain are too heavy for mobile Safari.
-   Swap them for cheap look-alikes: a soft text halo instead of the filter, an unblended grain layer. */
+/* phones/tablets: the SVG ink-bleed filter is too heavy for mobile Safari; use a soft text halo instead */
 @media (hover:none) and (pointer:coarse){
   *,*::before,*::after{filter:none!important}
   body{text-shadow:0 0 .5px color-mix(in srgb,currentColor 60%,transparent),0 0 3px color-mix(in srgb,currentColor 22%,transparent)}
@@ -591,10 +589,13 @@ bioBox.addEventListener("click",e=>{if(e.target.closest("a"))return;const s=getS
   bioBg=(bioBg+1)%BIO_BG.length;bioBox.style.backgroundColor=BIO_BG[bioBg]});
 bioBox.addEventListener("keydown",e=>{const d={ArrowDown:1,ArrowUp:-1,PageDown:1,PageUp:-1}[e.key];if(d&&bioCanMove(d)){e.preventDefault();bioShow(bioIdx+d)}});
 
-/* grain texture, generated once */
-(()=>{const s=220,c=document.createElement("canvas");c.width=c.height=s;const x=c.getContext("2d"),d=x.createImageData(s,s);
-  for(let i=0;i<d.data.length;i+=4){const v=Math.random()*255|0;d.data[i]=d.data[i+1]=d.data[i+2]=v;d.data[i+3]=255}
-  x.putImageData(d,0,0);document.getElementById("grain").style.backgroundImage=`url(${c.toDataURL()})`})();
+/* film grain, same mechanism as virgilabloh.com: one screen-sized layer of static noise (hard-light blend),
+   jumped to a random offset on every animation frame so it boils in place instead of sliding around */
+(()=>{const S=400,c=document.createElement("canvas");c.width=c.height=S;const x=c.getContext("2d"),d=x.createImageData(S,S);
+  for(let i=0;i<d.data.length;i+=4){const g=(Math.random()+Math.random()+Math.random()-1.5)*150+158;const v=g<0?0:g>255?255:g|0;d.data[i]=d.data[i+1]=d.data[i+2]=v;d.data[i+3]=255}
+  x.putImageData(d,0,0);const el=document.getElementById("grain");el.style.backgroundImage=`url(${c.toDataURL()})`;
+  const step=matchMedia("(hover:none) and (pointer:coarse)").matches?1000/30:0;let last=0;
+  (function tick(t){if(t-last>=step){last=t;el.style.backgroundPosition=`${Math.random()*S|0}px ${Math.random()*S|0}px`}requestAnimationFrame(tick)})(0)})();
 
 /* ---------- clock + boot counter ---------- */
 function tick(){const d=new Date(new Date().toLocaleString("en-US",{timeZone:"Europe/Rome"}));const p=n=>String(n).padStart(2,"0");
